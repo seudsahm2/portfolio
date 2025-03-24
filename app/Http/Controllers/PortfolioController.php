@@ -3,36 +3,25 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\PortfolioItem;
-use App\Models\Service;
 use App\Models\Testimonial;
 use App\Models\Contact;
 use App\Models\About;
 use App\Models\Skills;
 use App\Models\Resume;
+use App\Models\Hero;
 class PortfolioController extends Controller
 {
     public function index()
     {
-        $portfolioItems = PortfolioItem::all(); // Fetch all portfolio items
-        $services = Service::all();
         $testimonials = Testimonial::all();
         $contact = Contact::all();
         $about = About::first(); 
         $skills = Skills::all();
         $resumes = Resume::all();
-        return view('welcome', compact('portfolioItems','services','testimonials','contact','about','skills','resumes'));
+        $hero = Hero::first();
+        return view('welcome', compact('testimonials','contact','about','skills','resumes','hero'));
     }
 
-    public function portfolioDetails()
-    {
-        return view('portfolio.details');
-    }
-
-    public function serviceDetails()
-    {
-        return view('services.details');
-    }
 
     public function storeContact(Request $request)
     {

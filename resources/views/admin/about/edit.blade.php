@@ -51,7 +51,10 @@
         </div>
         <div class="form-group">
             <label for="image_url">Image URL</label>
-            <input type="file" name="image_url" id="image_url" class="form-control" value="{{ $about->image_url }}">
+            <input type="file" name="image_url" id="image_url" class="form-control">
+            @if ($about->image_url)
+                <img src="{{ asset('storage/' . $about->image_url) }}" alt="Current Image" width="100">
+            @endif
         </div>
         <button type="submit" class="btn btn-primary">Update</button>
     </form>

@@ -1,17 +1,20 @@
 <?php
-require __DIR__.'/admin.php';
 
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PortfolioController; // Add this
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PortfolioController;
-use App\Http\Controllers\ServiceController;
-use App\Http\Controllers\TestimonialController;
-use App\Http\Controllers\ContactController;
 
-Route::get('/', [PortfolioController::class, 'index']);
-Route::get('/portfolio-details', [PortfolioController::class, 'portfolioDetails']);
-Route::get('/service-details', [PortfolioController::class, 'serviceDetails']);
+Route::get('/', [PortfolioController::class, 'index'])->name('home'); // Updated
 
-Route::get('/services', [ServiceController::class, 'index']);
-Route::get('/testimonials', [TestimonialController::class, 'index']);
-Route::get('/contact', [ContactController::class, 'index']);
-Route::post('/contact', [PortfolioController::class, 'storeContact'])->name('contact.store');
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';
