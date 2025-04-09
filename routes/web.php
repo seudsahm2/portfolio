@@ -3,9 +3,11 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PortfolioController; // Add this
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\UserContactController;
 
-Route::get('/', [PortfolioController::class, 'index'])->name('home'); // Updated
-
+Route::get('/', [PortfolioController::class, 'index'])->name('welcome'); // Updated
+// Contact Form Route
+Route::post('/contact', [UserContactController::class, 'storeContact'])->name('contact.save');
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');

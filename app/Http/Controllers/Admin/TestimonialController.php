@@ -33,16 +33,26 @@ class TestimonialController extends Controller
 
         Log::info('Validation passed');
 
+        // Build the data array with all fields except image_url
+        $data = [
+            'name' => $request->input('name'),
+            'role' => $request->input('role'),
+            'quote' => $request->input('quote'),
+        ];
+
+        // Handle image upload
         if ($request->hasFile('image_url')) {
             Log::info('Image file found');
             $imagePath = $request->file('image_url')->store('images', 'public');
             Log::info('Image stored at: ' . $imagePath);
-            $request->merge(['image_url' => $imagePath]);
+            $data['image_url'] = $imagePath;
         } else {
             Log::info('No image file found');
+            // Since image is required, this shouldn’t happen due to validation
         }
 
-        $testimonial = Testimonial::create($request->all());
+        // Create the testimonial with the explicit data array
+        $testimonial = Testimonial::create($data);
 
         Log::info('Testimonial created: ', $testimonial->toArray());
 
@@ -67,21 +77,32 @@ class TestimonialController extends Controller
 
         Log::info('Validation passed');
 
+        // Build the data array with all fields except image_url
+        $data = [
+            'name' => $request->input('name'),
+            'role' => $request->input('role'),
+            'quote' => $request->input('quote'),
+        ];
+
+        // Handle image upload
         if ($request->hasFile('image_url')) {
             Log::info('Image file found');
-            // Delete the old image
+            // Delete the old image if it exists
             if ($testimonial->image_url) {
                 Storage::disk('public')->delete($testimonial->image_url);
                 Log::info('Old image deleted: ' . $testimonial->image_url);
             }
             $imagePath = $request->file('image_url')->store('images', 'public');
             Log::info('New image stored at: ' . $imagePath);
-            $request->merge(['image_url' => $imagePath]);
+            $data['image_url'] = $imagePath;
         } else {
             Log::info('No image file found');
+            // Keep the old image if no new one is uploaded
+            $data['image_url'] = $testimonial->image_url;
         }
 
-        $testimonial->update($request->all());
+        // Update the testimonial with the explicit data array
+        $testimonial->update($data);
 
         Log::info('Testimonial updated: ', $testimonial->toArray());
 
@@ -90,6 +111,10 @@ class TestimonialController extends Controller
 
     public function destroy(Testimonial $testimonial)
     {
+        // Optionally delete the image when destroying the testimonial
+        if ($testimonial->image_url) {
+            Storage::disk('public')->delete($testimonial->image_url);
+        }
         $testimonial->delete();
 
         return redirect()->route('testimonial.index')->with('success', 'Testimonial deleted successfully.');

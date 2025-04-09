@@ -1,4 +1,3 @@
-
 @extends('layouts.admin')
 
 @section('content')
@@ -47,6 +46,10 @@
         <div class="form-group">
             <label for="description">Description</label>
             <textarea name="description" id="description" class="form-control" rows="5" required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="additional_info">Additional Info</label>
+            <textarea name="additional_info" id="additional_info" class="form-control" rows="5"></textarea>
         </div>
         <div class="form-group">
             <label for="image_url">Image</label>

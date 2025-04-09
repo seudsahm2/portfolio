@@ -40,10 +40,8 @@
         <img src="{{ $hero ? asset('storage/' . $hero->image) : asset('assets/img/default-hero.jpg') }}" 
              alt="Hero Image" data-aos="fade-in" class="">
         <div class="container" data-aos="fade-up" data-aos-delay="100">
-          <!-- Use hero title if available, else a default welcome text -->
           <h2>{{ optional($hero)->title ?? 'Welcome to My Portfolio' }}</h2>
-          <!-- If $hero->typed_items exists, use it; else fallback to default typed values -->
-          <p>I'm <span class="typed" data-typed-items="{{ optional($hero)->typed_items ?? 'Designer, Developer, Freelancer, Photographer' }}"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+          <p>I'm <span class="typed" data-typed-items="{{ $skills->isNotEmpty() ? $skills->pluck('name')->implode(', ') : 'Designer, Developer, Freelancer, Photographer' }}"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
         </div>
       </section>
       <!-- =================== End Hero Section =================== -->
@@ -87,9 +85,8 @@
                   </ul>
                 </div>
               </div>
-              <!-- Display work experience or a fallback message -->
               <p class="py-3">
-                {{ optional($about)->work_experiance ?? 'No work experience provided' }}
+                {{ optional($about)->additional_info ?? 'No additional information provided' }}
               </p>
             </div>
           </div>
@@ -97,42 +94,11 @@
       </section>
       <!-- =================== End About Section =================== -->
 
-      <!-- =================== Skills Section =================== -->
-      <section id="skills" class="skills section light-background">
-        <div class="container section-title" data-aos="fade-up">
-          <h2>Skills</h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-        </div>
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-          <div class="row skills-content skills-animation">
-            <!-- Check if $skills exists and has items -->
-            @if(isset($skills) && $skills->count())
-              @foreach($skills as $skill)
-                <div class="col-lg-6">
-                  <div class="progress">
-                    <span class="skill"><span>{{ $skill->name }}</span> <i class="val">{{ $skill->percentage }}%</i></span>
-                    <div class="progress-bar-wrap">
-                      <div class="progress-bar" role="progressbar" aria-valuenow="{{ $skill->percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
-                  </div>
-                </div>
-              @endforeach
-            @else
-              <div class="col-12">
-                <p>No skills available.</p>
-              </div>
-            @endif
-          </div>
-        </div>
-      </section>
-      <!-- =================== End Skills Section =================== -->
 
       <!-- =================== Resume Section =================== -->
       <section id="resume" class="resume section">
         <div class="container section-title" data-aos="fade-up">
           <h2>Resume</h2>
-          <p>Magnam dolores commodi suscipit. Necessitatibus eius consequatur ex aliquid fuga eum quidem. Sit sint consectetur velit. Quisquam quos quisquam cupiditate. Et nemo qui impedit suscipit alias ea. Quia fugiat sit in iste officiis commodi quidem hic quas.</p>
         </div>
 
         <div class="container">
@@ -172,13 +138,79 @@
           </div>
         </div>
       </section>
-      <!-- =================== End Resume Section =================== -->
 
+            <!-- =================== Skills Section =================== -->
+            <section id="skills" class="skills section light-background">
+        <div class="container section-title" data-aos="fade-up">
+          <h2>Skills</h2>
+        </div>
+
+        <div class="container" data-aos="fade-up" data-aos-delay="100">
+          <div class="row skills-content skills-animation">
+            <!-- Check if $skills exists and has items -->
+            @if(isset($skills) && $skills->count())
+              @foreach($skills as $skill)
+                <div class="col-lg-6">
+                  <div class="progress">
+                    <span class="skill"><span>{{ $skill->name }}</span> <i class="val">{{ $skill->percentage }}%</i></span>
+                    <div class="progress-bar-wrap">
+                      <div class="progress-bar" role="progressbar" aria-valuenow="{{ $skill->percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                  </div>
+                </div>
+              @endforeach
+            @else
+              <div class="col-12">
+                <p>No skills available.</p>
+              </div>
+            @endif
+          </div>
+        </div>
+      </section>
+      <!-- =================== End Skills Section =================== -->
+
+      <!-- =================== Education Section =================== -->
+      <section id="education" class="education section">
+        <div class="container section-title" data-aos="fade-up">
+          <h2>Education</h2>
+        </div>
+
+        <div class="container">
+          <div class="row gy-4">
+            @foreach($educations as $education)
+            <div class="col-md-6" data-aos="fade-up" data-aos-delay="{{ 100 * $loop->iteration }}">
+              <div class="education-item position-relative pb-4">
+                <div class="timeline-point"></div>
+                <div class="education-content bg-white p-4 shadow-sm rounded">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="mb-0">{{ $education->title }}</h4>
+                    <small class="text-muted">
+                      @if($education->start_date)
+                        {{ \Carbon\Carbon::parse($education->start_date)->format('j F Y') }} - 
+                      @endif
+                      {{ $education->end_date ? \Carbon\Carbon::parse($education->end_date)->format('j F Y')  : 'Present' }}
+                    </small>
+                  </div>
+                  <h5 class="text-primary mb-3">{{ $education->subtitle }}</h5>
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="badge bg-light text-dark border"><i class="bi bi-geo-alt me-1"></i>{{ $education->location }}</span>
+                    @if($education->grade)
+                    <span class="badge bg-primary">Grade: {{ $education->grade }}</span>
+                    @endif
+                  </div>
+                  <p class="mb-0">{{ $education->description }}</p>
+                </div>
+              </div>
+            </div>
+            @endforeach
+          </div>
+        </div>
+      </section>
+      <!-- =================== End Education Section =================== -->
       <!-- =================== Testimonials Section =================== -->
       <section id="testimonials" class="testimonials section light-background">
         <div class="container section-title" data-aos="fade-up">
           <h2>Testimonials</h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
         </div>
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -208,98 +240,85 @@
           @endif
         </div>
       </section>
+
+
       <!-- =================== End Testimonials Section =================== -->
 
       <!-- =================== Contact Section =================== -->
       <section id="contact" class="contact section">
-        <div class="container section-title" data-aos="fade-up">
-          <h2>Contact</h2>
-          <p>Necessitatibus eius consequatur ex aliquid fuga eum quidem sint consectetur velit</p>
-        </div>
-
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-          <div class="row gy-4">
-            <div class="col-lg-5">
-              <div class="info-wrap">
-                <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="200">
-                  <i class="bi bi-geo-alt flex-shrink-0"></i>
-                  <div>
-                    <h3>Address</h3>
-                    <!-- Use about location or fallback message -->
-                    <p>{{ optional($about)->location ?? 'No address available' }}</p>
-                  </div>
-                </div>
-
-                <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-                  <i class="bi bi-telephone flex-shrink-0"></i>
-                  <div>
-                    <h3>Call Us</h3>
-                    <p>{{ optional($about)->phone ?? 'No phone number available' }}</p>
-                  </div>
-                </div>
-
-                <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-                  <i class="bi bi-envelope flex-shrink-0"></i>
-                  <div>
-                    <h3>Email Us</h3>
-                    <p>{{ optional($about)->email ?? 'No email available' }}</p>
-                  </div>
-                </div>
-
-                <iframe src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d48389.78314118045!2d-74.006138!3d40.710059!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c25a22a3bda30d%3A0xb89d1fe6bc499443!2sDowntown%20Conference%20Center!5e0!3m2!1sen!2sus!4v1676961268712!5m2!1sen!2sus" frameborder="0" style="border:0; width: 100%; height: 270px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-              </div>
-            </div>
-
-            <div class="col-lg-7">
-              <form action="{{ route('contact.store') }}" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-                @csrf
-                <div class="row gy-4">
-                  <div class="col-md-6">
-                    <label for="name-field" class="pb-2">Your Name</label>
-                    <input type="text" name="name" id="name-field" class="form-control" required="">
-                  </div>
-
-                  <div class="col-md-6">
-                    <label for="email-field" class="pb-2">Your Email</label>
-                    <input type="email" class="form-control" name="email" id="email-field" required="">
-                  </div>
-
-                  <div class="col-md-12">
-                    <label for="subject-field" class="pb-2">Subject</label>
-                    <input type="text" class="form-control" name="subject" id="subject-field" required="">
-                  </div>
-
-                  <div class="col-md-12">
-                    <label for="message-field" class="pb-2">Message</label>
-                    <textarea class="form-control" name="message" rows="10" id="message-field" required=""></textarea>
-                  </div>
-
-                  <div class="col-md-12 text-center">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Your message has been sent. Thank you!</div>
-                    <button type="submit">Send Message</button>
-                  </div>
-                </div>
-              </form>
-            </div>
+          <div class="container section-title" data-aos="fade-up">
+              <h2>Contact</h2>
           </div>
-        </div>
+
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+              <!-- Status Messages -->
+              @if(session('success'))
+              <div class="alert alert-success alert-dismissible fade show mb-4" role="alert">
+                  {{ session('success') }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              @endif
+
+              @if(session('error')) <!-- Added to catch controller error message -->
+              <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                  {{ session('error') }}
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              @elseif($errors->any()) <!-- Validation errors -->
+              <div class="alert alert-danger alert-dismissible fade show mb-4" role="alert">
+                  <ul class="mb-0">
+                      @foreach($errors->all() as $error)
+                      <li>{{ $error }}</li>
+                      @endforeach
+                  </ul>
+                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+              </div>
+              @endif
+
+              <div class="row justify-content-center">
+                  <div class="col-12 col-lg-8">
+                      <form action="{{ route('contact.save') }}" method="post" class="php-email-form">
+                          @csrf
+                          <div class="row gy-3">
+                              <div class="col-md-6">
+                                  <label for="name" class="form-label">Your Name</label>
+                                  <input type="text" name="name" id="name" class="form-control" 
+                                        value="{{ old('name') }}" required>
+                              </div>
+
+                              <div class="col-md-6">
+                                  <label for="email" class="form-label">Your Email</label>
+                                  <input type="email" name="email" id="email" class="form-control"
+                                        value="{{ old('email') }}" required>
+                              </div>
+
+                              <div class="col-12">
+                                  <label for="subject" class="form-label">Subject (optional)</label>
+                                  <input type="text" name="subject" id="subject" class="form-control"
+                                        value="{{ old('subject') }}">
+                              </div>
+
+                              <div class="col-12">
+                                  <label for="message" class="form-label">Message</label>
+                                  <textarea name="message" id="message" class="form-control" 
+                                            rows="5" required>{{ old('message') }}</textarea>
+                              </div>
+
+                              <div class="col-12 text-center mt-4">
+                                  <button type="submit" class="btn btn-primary btn-lg w-100 w-md-auto">
+                                      Send Message
+                                  </button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
+          </div>
       </section>
       <!-- =================== End Contact Section =================== -->
 
       <!-- =================== Footer =================== -->
-      <footer id="footer" class="footer position-relative light-background">
-        <div class="container">
-          <div class="copyright text-center">
-            <p>© <span>Copyright</span> <strong class="px-1 sitename">iPortfolio</strong> <span>All Rights Reserved</span></p>
-          </div>
-          <div class="credits">
-            <!-- Keep these links intact as per licensing -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com">ThemeWagon</a>
-          </div>
-        </div>
-      </footer>
+      @include('partials.footer')
       <!-- =================== End Footer =================== -->
 
       <!-- Scroll Top -->
@@ -310,7 +329,6 @@
 
       <!-- Vendor JS Files -->
       <script src="{{ asset('assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
-      <script src="{{ asset('assets/vendor/php-email-form/validate.js') }}"></script>
       <script src="{{ asset('assets/vendor/aos/aos.js') }}"></script>
       <script src="{{ asset('assets/vendor/typed.js/typed.umd.js') }}"></script>
       <script src="{{ asset('assets/vendor/purecounter/purecounter_vanilla.js') }}"></script>

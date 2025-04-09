@@ -7,6 +7,6 @@ class About extends Model
 {
     protected $table = 'about';
     protected $fillable = [
-        'name', 'birthday', 'website', 'phone', 'city', 'age', 'degree', 'email', 'freelance', 'description', 'image_url'
+        'name', 'birthday', 'website', 'phone', 'city', 'age', 'degree', 'email', 'freelance', 'description', 'image_url','additional_info'
     ];
 }

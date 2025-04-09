@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 use App\Models\Hero;
 use App\Models\About;
 use App\Models\Skills;
-use Illuminate\Support\Facades\Storage; // Import Storage facade to manage file storage
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\ValidationException;
 
 class HeroController extends Controller
 {
     public function index()
     {
         $hero = Hero::all();
-        $about = About::first(); // Define $about
-        $skill = Skills::first(); // Define $skill, adjust as needed
+        $about = About::first();
+        $skill = Skills::first();
         return view('admin.hero.index', compact('hero', 'about', 'skill'));
     }
 
@@ -26,48 +27,118 @@ class HeroController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+        try {
+            // Validate the request
+            $validated = $request->validate([
+                'image' => [
+                    'required',
+                    'image',
+                    'mimes:jpeg,png,jpg,gif,svg',
+                    'max:2048', // Max 2MB
+                    function ($attribute, $value, $fail) {
+                        try {
+                            [$width, $height] = getimagesize($value);
+                            if ($width < 800 || $height < 600) {
+                                $fail('The ' . $attribute . ' must be at least 800x600 pixels.');
+                            }
+                        } catch (\Exception $e) {
+                            $fail('Unable to process the image dimensions.');
+                            \Log::error('Image dimension check failed: ' . $e->getMessage());
+                        }
+                    },
+                ],
+            ]);
 
-        if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public');
-            $request->merge(['image' => $imagePath]);
+            // Process the image
+            $data = [];
+            if ($request->hasFile('image')) {
+                $imagePath = $request->file('image')->store('images', 'public');
+                $data['image'] = $imagePath;
+            } else {
+                throw new \Exception('No image file detected after validation.');
+            }
+
+            Hero::create($data);
+
+            return redirect()->route('hero.index')->with('success', 'Hero section created successfully.');
+        } catch (ValidationException $e) {
+            \Log::info('Validation failed: ' . json_encode($e->errors()));
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Hero store error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Failed to create hero section: ' . $e->getMessage())
+                ->withInput();
         }
-
-        Hero::create($request->all());
-
-        return redirect()->route('hero.index')->with('success', 'Hero section created successfully.');
     }
-
-    public function edit(Hero $hero)
-    {
-    
-        return view('admin.hero.edit', compact('hero'));
-    } 
 
     public function update(Request $request, Hero $hero)
     {
-        $request->validate([
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // Match $fillable
-        ]);
-    
-        $data = [];
-        if ($request->hasFile('image')) {
+        try {
+            $validated = $request->validate([
+                'image' => [
+                    'nullable',
+                    'image',
+                    'mimes:jpeg,png,jpg,gif,svg',
+                    'max:2048',
+                    function ($attribute, $value, $fail) {
+                        if ($value) {
+                            try {
+                                [$width, $height] = getimagesize($value);
+                                if ($width < 800 || $height < 600) {
+                                    $fail('The ' . $attribute . ' must be at least 800x600 pixels.');
+                                }
+                            } catch (\Exception $e) {
+                                $fail('Unable to process the image dimensions.');
+                                \Log::error('Image dimension check failed: ' . $e->getMessage());
+                            }
+                        }
+                    },
+                ],
+            ]);
+
+            $data = [];
+            if ($request->hasFile('image')) {
+                if ($hero->image) {
+                    Storage::disk('public')->delete($hero->image);
+                }
+                $data['image'] = $request->file('image')->store('images', 'public');
+            }
+
+            $hero->update($data);
+            return redirect()->route('hero.index')->with('success', 'Hero updated successfully.');
+        } catch (ValidationException $e) {
+            \Log::info('Validation failed: ' . json_encode($e->errors()));
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
+        } catch (\Exception $e) {
+            \Log::error('Hero update error: ' . $e->getMessage());
+            return redirect()->back()
+                ->with('error', 'Failed to update hero section: ' . $e->getMessage())
+                ->withInput();
+        }
+    }
+
+    public function destroy(Hero $hero) // Added missing $hero parameter
+    {
+        try {
             if ($hero->image) {
                 Storage::disk('public')->delete($hero->image);
             }
-            $data['image'] = $request->file('image')->store('images', 'public');
+            $hero->delete();
+            return redirect()->route('hero.index')->with('success', 'Hero deleted successfully.');
+        } catch (\Exception $e) {
+            \Log::error('Hero delete error: ' . $e->getMessage());
+            return redirect()->route('hero.index')
+                ->with('error', 'Failed to delete hero: ' . $e->getMessage());
         }
-    
-        $hero->update($data);
-        return redirect()->route('hero.index')->with('success', 'Hero updated successfully.');
-    }
-
-    public function destroy()
+    }    
+    public function edit(Hero $hero)
     {
-        $hero->delete();
-
-        return redirect()->route('hero.index')->with('success', 'hero deleted successfully.');
+        return view('admin.hero.edit', compact('hero'));
     }
+
 }

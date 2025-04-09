@@ -718,6 +718,62 @@ section,
   background-color: var(--accent-color);
 }
 
+
+
+/*--------------------------------------------------------------
+# Education Section
+--------------------------------------------------------------*/
+.education-item {
+  padding-left: 2rem;
+}
+
+.education-item::before {
+  content: '';
+  position: absolute;
+  left: 7px;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: #0563bb;
+}
+
+.timeline-point {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid #0563bb;
+  z-index: 1;
+}
+
+.education-content {
+  position: relative;
+  margin-left: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.education-content:hover {
+  transform: translateX(10px);
+}
+
+@media (max-width: 767px) {
+  .education-item {
+    padding-left: 1.5rem;
+  }
+  
+  .education-content {
+    margin-left: 1rem;
+  }
+  
+  .timeline-point {
+    width: 14px;
+    height: 14px;
+    left: -1px;
+  }
+}
 /*--------------------------------------------------------------
 # Resume Section
 --------------------------------------------------------------*/
@@ -1272,4 +1328,69 @@ section,
 --------------------------------------------------------------*/
 .starter-section {
   /* Add your styles here */
+}
+/* Footer Styles */
+.footer {
+  background: var(--light-background-color, #f8f9fa); /* Matches .light-background */
+  color: var(--default-color, #212529); /* Default dark text */
+  font-family: var(--font-default, "Poppins", sans-serif);
+}
+
+.footer .sitename {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--heading-color, #333);
+  font-family: var(--heading-font, "Roboto", sans-serif);
+}
+
+.footer a {
+  color: var(--default-color, #212529);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: var(--accent-color, #007bff); /* Use your portfolio's accent color */
+}
+
+.footer .social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: color-mix(in srgb, var(--default-color), transparent 90%);
+  border-radius: 50%;
+  margin: 0 5px;
+  font-size: 1.1rem;
+  transition: background-color 0.3s ease;
+}
+
+.footer .social-links a:hover {
+  background: var(--accent-color, #007bff);
+  color: #fff;
+}
+
+.footer ul.list-unstyled li {
+  margin-bottom: 0.5rem;
+}
+
+.footer .credits a {
+  color: var(--accent-color, #007bff);
+}
+
+.footer .credits a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 767px) {
+  .footer .sitename {
+    font-size: 1.25rem;
+  }
+  .footer .social-links a {
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
 }

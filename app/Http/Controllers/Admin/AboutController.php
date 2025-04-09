@@ -36,6 +36,7 @@ class AboutController extends Controller
             'freelance' => 'required|boolean',
             'description' => 'required|string',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'additional_info' => 'nullable|string',
         ]);
     
         Log::info('Validation passed');
@@ -52,6 +53,7 @@ class AboutController extends Controller
             'email' => $request->input('email'),
             'freelance' => $request->input('freelance'),
             'description' => $request->input('description'),
+            'additional_info' => $request->input('additional_info'),
         ];
     
         // Handle image upload separately
@@ -96,6 +98,7 @@ class AboutController extends Controller
             'freelance' => 'required|boolean',
             'description' => 'required|string',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'additional_info' => 'nullable|string',
         ]);
     
         Log::info('Validation passed');
@@ -112,6 +115,7 @@ class AboutController extends Controller
             'email' => $request->input('email'),
             'freelance' => $request->input('freelance'),
             'description' => $request->input('description'),
+            'additional_info' => $request->input('additional_info'),
         ];
     
         // Handle image upload separately

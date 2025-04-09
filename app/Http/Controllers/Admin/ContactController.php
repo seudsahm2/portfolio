@@ -9,7 +9,7 @@ class ContactController extends Controller
 {
     public function index()
     {
-        $contacts = Contact::all();
+        $contacts = Contact::orderBy('created_at', 'desc')->get(); // Order by latest
         return view('admin.contact.index', compact('contacts'));
     }
 

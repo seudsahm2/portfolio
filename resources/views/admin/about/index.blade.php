@@ -24,6 +24,8 @@
                 <p><strong>Freelance:</strong> {{ $abouts->first()->freelance ? 'Yes' : 'No' }}</p>
                 <p><strong>Description:</strong></p>
                 <p>{{ $abouts->first()->description }}</p>
+                <p><strong>Additional Info:</strong></p>
+                <p>{{ $abouts->first()->additional_info }}</p>
                 {{-- Display the image if available --}}
                 @if($abouts->first()->image_url)
                     <div class="text-center mt-3">
