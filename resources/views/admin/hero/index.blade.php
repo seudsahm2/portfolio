@@ -32,39 +32,53 @@
         @if($hero->isNotEmpty())
             <a href="{{ route('hero.edit', $hero->first()->id) }}" class="btn btn-primary mb-3">Edit First Hero</a>
             <div class="table-responsive">
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
+            <table class="table table-striped table-bordered">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Name</th>
+                        <th>Skill</th>
+                        <th>Hero Image</th>
+                        <th>Portfolio Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($hero as $heroItem)
                         <tr>
-                            <th>Name</th>
-                            <th>Skill</th>
-                            <th>Image URL</th>
-                            <th>Actions</th>
+                            <td>{{ $about ? $about->name : 'N/A' }}</td>
+                            <td>{{ $skill ? $skill->name : 'N/A' }}</td>
+
+                            <!-- Hero Background Image -->
+                            <td>
+                                @if($heroItem->image)
+                                    <img src="{{ asset('storage/' . $heroItem->image) }}" alt="Hero Image" width="100">
+                                @else
+                                    No Image
+                                @endif
+                            </td>
+
+                            <!-- Portfolio Profile Image -->
+                            <td>
+                                @if($heroItem->portfolio_image)
+                                    <img src="{{ asset('storage/' . $heroItem->portfolio_image) }}" alt="Portfolio Image" width="100">
+                                @else
+                                    No Portfolio Image
+                                @endif
+                            </td>
+
+                            <td>
+                                <a href="{{ route('hero.edit', $heroItem->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                <form action="{{ route('hero.destroy', $heroItem->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this hero?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                                </form>
+                            </td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach($hero as $heroItem)
-                            <tr>
-                                <td>{{ $about ? $about->name : 'N/A' }}</td>
-                                <td>{{ $skill ? $skill->name : 'N/A' }}</td>
-                                <td>
-                                    @if($heroItem->image)
-                                        <img src="{{ asset('storage/' . $heroItem->image) }}" alt="Image" width="100">
-                                    @else
-                                        No Image
-                                    @endif
-                                </td>
-                                <td>
-                                    <a href="{{ route('hero.edit', $heroItem->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                                    <form action="{{ route('hero.destroy', $heroItem->id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this hero?');">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+                    @endforeach
+                </tbody>
+
+            </table>
             </div>
         @else
             <p>No heroes available.</p>

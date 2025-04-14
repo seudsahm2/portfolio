@@ -9,9 +9,9 @@ use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\EducationController;
 
-Route::prefix('admin')->middleware(['auth'])->group(function () {
-    // Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
-    Route::resource('hero', HeroController::class); 
+// Secure admin routes with middleware
+Route::prefix('secure-admin-panel')->middleware(['auth', 'admin', 'log_admin', 'throttle:30,1'])->group(function () {
+    Route::resource('hero', HeroController::class);
     Route::resource('about', AboutController::class);
     Route::resource('contact', ContactController::class);
     Route::resource('resume', ResumeController::class);

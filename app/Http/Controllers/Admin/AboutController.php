@@ -26,9 +26,9 @@ class AboutController extends Controller
     
         $request->validate([
             'name' => 'required|string|max:255',
-            'birthday' => 'required|date',
+            'birthday' => 'required|date|before:today', // Ensure the birthday is a past date
             'website' => 'nullable|url',
-            'phone' => 'required|string|max:255',
+            'phone' => 'required|string|max:15|regex:/^\+?[0-9\s\-]+$/', // Validate phone number format
             'city' => 'required|string|max:255',
             'age' => 'required|integer',
             'degree' => 'required|string|max:255',
@@ -88,9 +88,9 @@ class AboutController extends Controller
     
         $request->validate([
             'name' => 'required|string|max:255',
-            'birthday' => 'required|date',
+            'birthday' => 'required|date|before:today', // Ensure the birthday is a past date
             'website' => 'nullable|url',
-            'phone' => 'required|string|max:255',
+            'phone' => 'required|string|max:15|regex:/^\+?[0-9\s\-]+$/', // Validate phone number format
             'city' => 'required|string|max:255',
             'age' => 'required|integer',
             'degree' => 'required|string|max:255',

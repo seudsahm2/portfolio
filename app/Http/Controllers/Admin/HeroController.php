@@ -28,13 +28,13 @@ class HeroController extends Controller
     public function store(Request $request)
     {
         try {
-            // Validate the request
+            // Validate both image and portfolio_image
             $validated = $request->validate([
                 'image' => [
                     'required',
                     'image',
                     'mimes:jpeg,png,jpg,gif,svg',
-                    'max:2048', // Max 2MB
+                    'max:2048',
                     function ($attribute, $value, $fail) {
                         try {
                             [$width, $height] = getimagesize($value);
@@ -47,15 +47,24 @@ class HeroController extends Controller
                         }
                     },
                 ],
+                'portfolio_image' => [
+                    'nullable',
+                    'image',
+                    'mimes:jpeg,png,jpg,gif,svg',
+                    'max:2048',
+                ],
             ]);
 
-            // Process the image
             $data = [];
+
+            // Save main hero image
             if ($request->hasFile('image')) {
-                $imagePath = $request->file('image')->store('images', 'public');
-                $data['image'] = $imagePath;
-            } else {
-                throw new \Exception('No image file detected after validation.');
+                $data['image'] = $request->file('image')->store('images', 'public');
+            }
+
+            // Save profile/portfolio image
+            if ($request->hasFile('portfolio_image')) {
+                $data['portfolio_image'] = $request->file('portfolio_image')->store('images', 'public');
             }
 
             Hero::create($data);
@@ -77,6 +86,7 @@ class HeroController extends Controller
     public function update(Request $request, Hero $hero)
     {
         try {
+            // Validate both fields
             $validated = $request->validate([
                 'image' => [
                     'nullable',
@@ -97,9 +107,17 @@ class HeroController extends Controller
                         }
                     },
                 ],
+                'portfolio_image' => [
+                    'nullable',
+                    'image',
+                    'mimes:jpeg,png,jpg,gif,svg',
+                    'max:2048',
+                ],
             ]);
 
             $data = [];
+
+            // Replace hero background image if provided
             if ($request->hasFile('image')) {
                 if ($hero->image) {
                     Storage::disk('public')->delete($hero->image);
@@ -107,7 +125,16 @@ class HeroController extends Controller
                 $data['image'] = $request->file('image')->store('images', 'public');
             }
 
+            // Replace profile/portfolio image if provided
+            if ($request->hasFile('portfolio_image')) {
+                if ($hero->portfolio_image) {
+                    Storage::disk('public')->delete($hero->portfolio_image);
+                }
+                $data['portfolio_image'] = $request->file('portfolio_image')->store('images', 'public');
+            }
+
             $hero->update($data);
+
             return redirect()->route('hero.index')->with('success', 'Hero updated successfully.');
         } catch (ValidationException $e) {
             \Log::info('Validation failed: ' . json_encode($e->errors()));
@@ -122,23 +149,30 @@ class HeroController extends Controller
         }
     }
 
-    public function destroy(Hero $hero) // Added missing $hero parameter
+    public function destroy(Hero $hero)
     {
         try {
+            // Delete both images from storage
             if ($hero->image) {
                 Storage::disk('public')->delete($hero->image);
             }
+
+            if ($hero->portfolio_image) {
+                Storage::disk('public')->delete($hero->portfolio_image);
+            }
+
             $hero->delete();
+
             return redirect()->route('hero.index')->with('success', 'Hero deleted successfully.');
         } catch (\Exception $e) {
             \Log::error('Hero delete error: ' . $e->getMessage());
             return redirect()->route('hero.index')
                 ->with('error', 'Failed to delete hero: ' . $e->getMessage());
         }
-    }    
+    }
+
     public function edit(Hero $hero)
     {
         return view('admin.hero.edit', compact('hero'));
     }
-
 }

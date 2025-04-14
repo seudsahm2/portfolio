@@ -2,13 +2,20 @@
     <i class="header-toggle d-xl-none bi bi-list"></i>
 
     <div class="profile-img">
-      <img src="{{ asset('assets/img/my-profile-img.jpg') }}" alt="" class="img-fluid rounded-circle">
+        <!-- Display the user's profile image if it exists, otherwise use a default image -->
+        @php
+          $hero = \App\Models\Hero::first(); // or use id or slug if needed
+        @endphp
+
+        <img src="{{ $hero && $hero->portfolio_image ? asset('storage/' . $hero->portfolio_image) : asset('assets/img/default-profile.png') }}" 
+            alt="Portfolio Image" class="img-fluid rounded-circle">
+
     </div>
 
     <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
       <!-- Uncomment the line below if you also wish to use an image logo -->
       <!-- <img src="{{ asset('assets/img/logo.png') }}" alt=""> -->
-      <h1 class="sitename">{{ $about->name ?? 'Default Name' }}</h1>
+      <h1 class="sitename">{{ optional($about)->name ?? 'No Name Provided' }}</h1>
     </a>
 
     <div class="social-links text-center">

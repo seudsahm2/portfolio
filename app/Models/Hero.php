@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Hero extends Model
 {
     protected $fillable = [
-        'image'
+        'image','portfolio_image'
     ];
 }

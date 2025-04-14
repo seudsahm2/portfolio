@@ -160,7 +160,10 @@ h6 {
 .header .profile-img img {
   margin: 15px auto;
   display: block;
-  width: 120px;
+  width: 130px; /* Fixed width */
+  height: 130px; /* Fixed height to ensure a perfect circle */
+  object-fit: cover; /* Ensures the image fills the container without distortion */
+  border-radius: 50%; /* Makes the image a perfect circle */
   border: 8px solid color-mix(in srgb, var(--default-color), transparent 85%);
 }
 
@@ -647,6 +650,52 @@ section,
   color: var(--accent-color);
   line-height: 0;
 }
+
+/* About Section Image Styling */
+.about-image {
+  max-width: 100%; /* Ensure the image doesn't exceed the container width */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 10px; /* Add rounded corners for a modern look */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add a subtle shadow for better aesthetics */
+}
+
+/* About Section Image Styling */
+.about-image-wrapper {
+  position: relative;
+  overflow: hidden;
+  border-radius: 15px; /* Add rounded corners for a modern look */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Add a subtle shadow for better aesthetics */
+  max-width: 100%; /* Ensure the wrapper doesn't exceed the container width */
+}
+
+.about-image {
+  width: 100%; /* Make the image fill the wrapper */
+  height: auto; /* Maintain aspect ratio */
+  transition: transform 0.3s ease, box-shadow 0.3s ease; /* Add smooth hover effects */
+}
+
+.about-image-wrapper:hover .about-image {
+  transform: scale(1.05); /* Slight zoom effect on hover */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Enhance shadow on hover */
+}
+
+/* Responsive Styling for Tablets and Mobile Devices */
+
+
+@media (max-width: 576px) { /* For mobile devices */
+  .about-image-wrapper {
+      max-width: 100%; /* Ensure the image fits smaller screens */
+      margin-bottom: 20px; /* Add spacing below the image */
+  }
+}
+/* Responsive Styling for Tablets and Mobile Devices */
+@media (min-width: 768px) {
+  .about-image-wrapper {
+      max-width: 80%; /* Reduce the image size on smaller screens */
+      margin: 0 auto; /* Center the image */
+  }
+}
+
 
 /*--------------------------------------------------------------
 # Stats Section

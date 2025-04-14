@@ -6,7 +6,7 @@
     <!-- Meta and Title -->
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>Index - iPortfolio Bootstrap Template</title>
+    <title>{{ optional($about)->name ?? 'No Name Provided' }}Portfolio</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -38,7 +38,7 @@
       <section id="hero" class="hero section dark-background">
         <!-- If $hero exists use its image; otherwise fallback to a default image -->
         <img src="{{ $hero ? asset('storage/' . $hero->image) : asset('assets/img/default-hero.jpg') }}" 
-             alt="Hero Image" data-aos="fade-in" class="">
+             alt="Hero Image" data-aos="fade-in" class="hero_img">
         <div class="container" data-aos="fade-up" data-aos-delay="100">
           <h2>{{ optional($hero)->title ?? 'Welcome to My Portfolio' }}</h2>
           <p>I'm <span class="typed" data-typed-items="{{ $skills->isNotEmpty() ? $skills->pluck('name')->implode(', ') : 'Designer, Developer, Freelancer, Photographer' }}"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
@@ -55,14 +55,17 @@
         </div>
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
-          <div class="row gy-4 justify-content-center">
-            <div class="col-lg-4">
-              <!-- If about image exists, show it; else use a default image -->
-              <img src="{{ $about ? asset($about->image_url) : asset('assets/img/default-about.jpg') }}" 
-                   class="img-fluid" alt="{{ optional($about)->name ?? 'About Section' }}">
+          <div class="row gy-4 align-items-center">
+            <!-- Image Column -->
+            <div class="col-lg-4 col-md-6 text-center">
+              <div class="about-image-wrapper">
+                <img src="{{ $about ? asset($about->image_url) : asset('assets/img/default-about.jpg') }}" 
+                     class="img-fluid about-image" alt="{{ optional($about)->name ?? 'About Section' }}">
+              </div>
             </div>
+
+            <!-- Content Column -->
             <div class="col-lg-8 content">
-              <!-- Display about name or default text -->
               <h2>{{ optional($about)->name ?? 'No Name Provided' }}</h2>
               <p class="fst-italic py-3"></p>
               <div class="row">
