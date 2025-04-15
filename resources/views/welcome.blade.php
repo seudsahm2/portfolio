@@ -59,7 +59,7 @@
             <!-- Image Column -->
             <div class="col-lg-4 col-md-6 text-center">
               <div class="about-image-wrapper">
-                <img src="{{ $about ? asset($about->image_url) : asset('assets/img/default-about.jpg') }}" 
+                <img src="{{ $about ? asset('storage/' . $about->image_url) : asset('assets/img/default-about.jpg') }}" 
                      class="img-fluid about-image" alt="{{ optional($about)->name ?? 'About Section' }}">
               </div>
             </div>
