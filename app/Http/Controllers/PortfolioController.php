@@ -10,7 +10,7 @@ use App\Models\Skills;
 use App\Models\Resume;
 use App\Models\Hero;
 use App\Models\Education;
-
+use App\Models\Profession;
 class PortfolioController extends Controller
 {
     public function index()
@@ -21,7 +21,8 @@ class PortfolioController extends Controller
         $resumes = Resume::all();
         $hero = Hero::first();
         $educations = Education::all();
-        return view('welcome', compact('testimonials', 'about', 'skills', 'resumes', 'hero', 'educations'));
+        $professions = Profession::all();
+        return view('welcome', compact('testimonials', 'about', 'skills', 'resumes', 'hero', 'educations','professions'));
     }
 
 }

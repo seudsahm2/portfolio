@@ -36,12 +36,21 @@
     <main class="main">
       <!-- =================== Hero Section =================== -->
       <section id="hero" class="hero section dark-background">
-        <!-- If $hero exists use its image; otherwise fallback to a default image -->
         <img src="{{ $hero ? asset('storage/' . $hero->image) : asset('assets/img/default-hero.jpg') }}" 
-             alt="Hero Image" data-aos="fade-in" class="hero_img">
+            alt="Hero Image" data-aos="fade-in" class="hero_img">
         <div class="container" data-aos="fade-up" data-aos-delay="100">
-          <h2>{{ optional($hero)->title ?? 'Welcome to My Portfolio' }}</h2>
-          <p>I'm <span class="typed" data-typed-items="{{ $skills->isNotEmpty() ? $skills->pluck('name')->implode(', ') : 'Designer, Developer, Freelancer, Photographer' }}"></span><span class="typed-cursor typed-cursor--blink" aria-hidden="true"></span></p>
+            <h2>{{ optional($hero)->title ?? 'Welcome to My Portfolio' }}</h2>
+            <p>
+                @if($professions->isNotEmpty())
+                    <span class="typed" data-typed-items="
+                        @foreach($professions as $profession)
+                            I'm {{ $profession->name }}@if(!$loop->last)|@endif
+                        @endforeach
+                    "></span>
+                @else
+                    <span class="typed" data-typed-items="I'm a Designer|I'm a Developer|I'm a Freelancer|I'm a Photographer"></span>
+                @endif
+            </p>
         </div>
       </section>
       <!-- =================== End Hero Section =================== -->

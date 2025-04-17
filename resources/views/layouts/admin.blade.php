@@ -18,7 +18,7 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto"> <!-- me-auto pushes items to the left -->
-                <!-- Hero Section (Moved to First Position) -->
+                <!-- Hero Section -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('hero.index') }}">
                         <i class="bi bi-display"></i> Hero
@@ -52,6 +52,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{ route('education.index') }}">
                         <i class="bi bi-mortarboard"></i> Education
+                    </a>
+                </li>
+                <!-- Professions Section -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('professions.index') }}">
+                        <i class="bi bi-briefcase"></i> Professions
                     </a>
                 </li>
             </ul>

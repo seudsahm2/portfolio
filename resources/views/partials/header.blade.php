@@ -15,7 +15,7 @@
     <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
       <!-- Uncomment the line below if you also wish to use an image logo -->
       <!-- <img src="{{ asset('assets/img/logo.png') }}" alt=""> -->
-      <h1 class="sitename">{{ optional($about)->name ?? 'No Name Provided' }}</h1>
+      <h4 class="sitename">{{ optional($about)->name ?? 'No Name Provided' }}</h4>
     </a>
 
     <div class="social-links text-center">

@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\SkillController;
 use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\HeroController;
 use App\Http\Controllers\Admin\EducationController;
+use App\Http\Controllers\Admin\Professions;
 
 // Secure admin routes with middleware
 Route::prefix('secure-admin-panel')->middleware(['auth', 'admin', 'log_admin', 'throttle:30,1'])->group(function () {
@@ -18,4 +19,5 @@ Route::prefix('secure-admin-panel')->middleware(['auth', 'admin', 'log_admin', '
     Route::resource('skill', SkillController::class);
     Route::resource('testimonial', TestimonialController::class);
     Route::resource('education', EducationController::class);
+    Route::resource('professions', Professions::class);
 });
