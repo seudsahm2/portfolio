@@ -27,6 +27,9 @@ class TestimonialController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15|regex:/^\\+?[0-9\\s\\-]+$/',
             'image_url' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'quote' => 'required|string',
         ]);
@@ -37,6 +40,9 @@ class TestimonialController extends Controller
         $data = [
             'name' => $request->input('name'),
             'role' => $request->input('role'),
+            'organization' => $request->input('organization'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
             'quote' => $request->input('quote'),
         ];
 
@@ -48,7 +54,6 @@ class TestimonialController extends Controller
             $data['image_url'] = $imagePath;
         } else {
             Log::info('No image file found');
-            // Since image is required, this shouldn’t happen due to validation
         }
 
         // Create the testimonial with the explicit data array
@@ -71,6 +76,9 @@ class TestimonialController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'role' => 'required|string|max:255',
+            'organization' => 'required|string|max:255',
+            'email' => 'required|email|max:255',
+            'phone' => 'required|string|max:15|regex:/^\\+?[0-9\\s\\-]+$/',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'quote' => 'required|string',
         ]);
@@ -81,6 +89,9 @@ class TestimonialController extends Controller
         $data = [
             'name' => $request->input('name'),
             'role' => $request->input('role'),
+            'organization' => $request->input('organization'),
+            'email' => $request->input('email'),
+            'phone' => $request->input('phone'),
             'quote' => $request->input('quote'),
         ];
 

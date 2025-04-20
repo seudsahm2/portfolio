@@ -23,12 +23,12 @@ class AboutController extends Controller
     public function store(Request $request)
     {
         Log::info('Store method called');
-    
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'birthday' => 'required|date|before:today', // Ensure the birthday is a past date
+            'birthday' => 'required|date|before:today',
             'website' => 'nullable|url',
-            'phone' => 'required|string|max:15|regex:/^\+?[0-9\s\-]+$/', // Validate phone number format
+            'phone' => 'required|string|max:15|regex:/^\\+?[0-9\\s\\-]+$/',
             'city' => 'required|string|max:255',
             'age' => 'required|integer',
             'degree' => 'required|string|max:255',
@@ -36,12 +36,11 @@ class AboutController extends Controller
             'freelance' => 'required|boolean',
             'description' => 'required|string',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'additional_info' => 'nullable|string',
+            'objective' => 'nullable|string',
         ]);
-    
-        Log::info('Validation passed');
-    
-        // Create a data array with all fields except image_url
+
+        Log::info('Validation passed', $request->all());
+
         $data = [
             'name' => $request->input('name'),
             'birthday' => $request->input('birthday'),
@@ -53,27 +52,26 @@ class AboutController extends Controller
             'email' => $request->input('email'),
             'freelance' => $request->input('freelance'),
             'description' => $request->input('description'),
-            'additional_info' => $request->input('additional_info'),
+            'objective' => $request->input('objective'),
         ];
-    
-        // Handle image upload separately
+
         if ($request->hasFile('image_url')) {
             Log::info('Image file found');
-            // Store the image and get its path
             $imagePath = $request->file('image_url')->store('images', 'public');
             Log::info('Image stored at: ' . $imagePath);
-            // Set image_url in data
             $data['image_url'] = $imagePath;
         } else {
             Log::info('No image file found');
-            // If no image is uploaded, set image_url to null (or leave out since it’s nullable)
         }
-    
-        // Create the model with the explicit data array
-        $about = About::create($data);
-    
-        Log::info('About section created: ', $about->toArray());
-    
+
+        try {
+            $about = About::create($data);
+            Log::info('About section created successfully', $about->toArray());
+        } catch (\Exception $e) {
+            Log::error('Error creating About section: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to create About section. Please try again.');
+        }
+
         return redirect()->route('about.index')->with('success', 'About section created successfully.');
     }
 
@@ -85,12 +83,12 @@ class AboutController extends Controller
     public function update(Request $request, About $about)
     {
         Log::info('Update method called');
-    
+
         $request->validate([
             'name' => 'required|string|max:255',
-            'birthday' => 'required|date|before:today', // Ensure the birthday is a past date
+            'birthday' => 'required|date|before:today',
             'website' => 'nullable|url',
-            'phone' => 'required|string|max:15|regex:/^\+?[0-9\s\-]+$/', // Validate phone number format
+            'phone' => 'required|string|max:15|regex:/^\\+?[0-9\\s\\-]+$/',
             'city' => 'required|string|max:255',
             'age' => 'required|integer',
             'degree' => 'required|string|max:255',
@@ -98,12 +96,11 @@ class AboutController extends Controller
             'freelance' => 'required|boolean',
             'description' => 'required|string',
             'image_url' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'additional_info' => 'nullable|string',
+            'objective' => 'nullable|string',
         ]);
-    
-        Log::info('Validation passed');
-    
-        // Create a data array with all fields except image_url
+
+        Log::info('Validation passed', $request->all());
+
         $data = [
             'name' => $request->input('name'),
             'birthday' => $request->input('birthday'),
@@ -115,33 +112,31 @@ class AboutController extends Controller
             'email' => $request->input('email'),
             'freelance' => $request->input('freelance'),
             'description' => $request->input('description'),
-            'additional_info' => $request->input('additional_info'),
+            'objective' => $request->input('objective'),
         ];
-    
-        // Handle image upload separately
+
         if ($request->hasFile('image_url')) {
             Log::info('Image file found');
-            // Delete the old image if it exists
             if ($about->image_url) {
                 Storage::disk('public')->delete($about->image_url);
                 Log::info('Old image deleted: ' . $about->image_url);
             }
-            // Store the new image and get its path
             $imagePath = $request->file('image_url')->store('images', 'public');
             Log::info('New image stored at: ' . $imagePath);
-            // Set image_url in data
             $data['image_url'] = $imagePath;
         } else {
             Log::info('No image file found');
-            // Keep the old image
             $data['image_url'] = $about->image_url;
         }
-    
-        // Update the model with the explicit data array
-        $about->update($data);
-    
-        Log::info('About section updated: ', $about->toArray());
-    
+
+        try {
+            $about->update($data);
+            Log::info('About section updated successfully', $about->toArray());
+        } catch (\Exception $e) {
+            Log::error('Error updating About section: ' . $e->getMessage());
+            return redirect()->back()->with('error', 'Failed to update About section. Please try again.');
+        }
+
         return redirect()->route('about.index')->with('success', 'About section updated successfully.');
     }
 

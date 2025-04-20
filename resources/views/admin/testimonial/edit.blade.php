@@ -1,4 +1,3 @@
-
 @extends('layouts.admin')
 
 @section('content')
@@ -13,6 +12,18 @@
         <div class="form-group">
             <label for="role">Role</label>
             <input type="text" name="role" id="role" class="form-control" value="{{ $testimonial->role }}" required>
+        </div>
+        <div class="form-group">
+            <label for="organization">Organization</label>
+            <input type="text" name="organization" id="organization" class="form-control" value="{{ $testimonial->organization }}" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" value="{{ $testimonial->email }}" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" name="phone" id="phone" class="form-control" value="{{ $testimonial->phone }}">
         </div>
         <div class="form-group">
             <label for="image_url">Image URL</label>

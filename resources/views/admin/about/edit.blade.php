@@ -75,18 +75,6 @@
             @enderror
         </div>
 
-        <!-- Freelance -->
-        <div class="form-group">
-            <label for="freelance">Freelance</label>
-            <select name="freelance" id="freelance" class="form-control @error('freelance') is-invalid @enderror" required>
-                <option value="1" {{ old('freelance', $about->freelance) == '1' ? 'selected' : '' }}>Yes</option>
-                <option value="0" {{ old('freelance', $about->freelance) == '0' ? 'selected' : '' }}>No</option>
-            </select>
-            @error('freelance')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
         <!-- Description -->
         <div class="form-group">
             <label for="description">Description</label>
@@ -98,9 +86,9 @@
 
         <!-- Additional Info -->
         <div class="form-group">
-            <label for="additional_info">Additional Info</label>
-            <textarea name="additional_info" id="additional_info" class="form-control @error('additional_info') is-invalid @enderror" rows="5">{{ old('additional_info', $about->additional_info) }}</textarea>
-            @error('additional_info')
+            <label for="objective">Objective</label>
+            <textarea name="objective" id="objective" class="form-control @error('objective') is-invalid @enderror" rows="5">{{ old('objective', $about->objective) }}</textarea>
+            @error('objective')
                 <div class="invalid-feedback">{{ $message }}</div>
             @enderror
         </div>

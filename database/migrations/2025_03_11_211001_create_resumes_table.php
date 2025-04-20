@@ -14,7 +14,6 @@ class CreateResumesTable extends Migration
     {
         Schema::create('resumes', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
             $table->string('subtitle')->nullable();
             $table->string('type'); // 'summary', 'education', 'experience'
             $table->text('description')->nullable();
@@ -33,6 +32,9 @@ class CreateResumesTable extends Migration
      */
     public function down()
     {
+        Schema::table('resumes', function (Blueprint $table) {
+            $table->dropColumn('title');
+        });
         Schema::dropIfExists('resumes');
     }
 }

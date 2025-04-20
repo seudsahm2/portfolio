@@ -1,4 +1,3 @@
-
 @extends('layouts.admin')
 
 @section('content')
@@ -11,6 +10,9 @@
                 <th>Role</th>
                 <th>Image URL</th>
                 <th>Quote</th>
+                <th>Organization</th>
+                <th>Email</th>
+                <th>Phone</th>
                 <th>Actions</th>
             </tr>
         </thead>
@@ -21,6 +23,9 @@
                     <td>{{ $testimonial->role }}</td>
                     <td>{{ $testimonial->image_url }}</td>
                     <td>{{ $testimonial->quote }}</td>
+                    <td>{{ $testimonial->organization }}</td>
+                    <td>{{ $testimonial->email }}</td>
+                    <td>{{ $testimonial->phone }}</td>
                     <td>
                         <a href="{{ route('testimonial.edit', $testimonial->id) }}" class="btn btn-warning">Edit</a>
                         <form action="{{ route('testimonial.destroy', $testimonial->id) }}" method="POST" style="display:inline;">

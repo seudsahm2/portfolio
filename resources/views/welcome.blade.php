@@ -59,8 +59,9 @@
       <section id="about" class="about section">
         <div class="container section-title" data-aos="fade-up">
           <h2>About</h2>
-          <!-- Display about description or a fallback message -->
-          <p>{{ optional($about)->description ?? 'No description available' }}</p>
+          <p>
+              {{ optional($about)->objective ?? '' }}
+          </p>
         </div>
 
         <div class="container" data-aos="fade-up" data-aos-delay="100">
@@ -84,7 +85,7 @@
                     <li><i class="bi bi-chevron-right"></i> <strong>Birthday:</strong> <span>{{ optional($about)->birthday ?? 'N/A' }}</span></li>
                     <li><i class="bi bi-chevron-right"></i> <strong>Website:</strong> <span>{{ optional($about)->website ?? 'N/A' }}</span></li>
                     <li><i class="bi bi-chevron-right"></i> <strong>Phone:</strong> <span>{{ optional($about)->phone ?? 'N/A' }}</span></li>
-                    <li><i class="bi bi-chevron-right"></i> <strong>City:</strong> <span>{{ optional($about)->city ?? 'N/A' }}</span></li>
+                    <li><i class="bi bi-chevron-right"></i> <strong>Location:</strong> <span>{{ optional($about)->city ?? 'N/A' }}</span></li>
                   </ul>
                 </div>
                 <div class="col-lg-6">
@@ -97,9 +98,8 @@
                   </ul>
                 </div>
               </div>
-              <p class="py-3">
-                {{ optional($about)->additional_info ?? 'No additional information provided' }}
-              </p>
+          <!-- Display about description or a fallback message -->
+          <p class="py-3">{{ optional($about)->description ?? '' }}</p>
             </div>
           </div>
         </div>
@@ -182,6 +182,7 @@
       <!-- =================== End Skills Section =================== -->
 
       <!-- =================== Education Section =================== -->
+      <!-- =================== Education Section =================== -->
       <section id="education" class="education section">
         <div class="container section-title" data-aos="fade-up">
           <h2>Education</h2>
@@ -190,27 +191,38 @@
         <div class="container">
           <div class="row gy-4">
             @foreach($educations as $education)
-            <div class="col-md-6" data-aos="fade-up" data-aos-delay="{{ 100 * $loop->iteration }}">
-              <div class="education-item position-relative pb-4">
+            <div class="col-12" data-aos="fade-up" data-aos-delay="{{ 100 * $loop->iteration }}">
+              <div class="education-item position-relative">
                 <div class="timeline-point"></div>
-                <div class="education-content bg-white p-4 shadow-sm rounded">
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <h4 class="mb-0">{{ $education->title }}</h4>
-                    <small class="text-muted">
+                <div class="education-content">
+                  <div class="education-header">
+                    <h4 class="education-title">{{ $education->title }}</h4>
+                    <div class="education-dates">
+                      <i class="bi bi-calendar-event"></i>
                       @if($education->start_date)
-                        {{ \Carbon\Carbon::parse($education->start_date)->format('j F Y') }} - 
+                        {{ \Carbon\Carbon::parse($education->start_date)->format('M Y') }} - 
                       @endif
-                      {{ $education->end_date ? \Carbon\Carbon::parse($education->end_date)->format('j F Y')  : 'Present' }}
-                    </small>
+                      {{ $education->end_date ? \Carbon\Carbon::parse($education->end_date)->format('M Y')  : 'Present' }}
+                    </div>
                   </div>
-                  <h5 class="text-primary mb-3">{{ $education->subtitle }}</h5>
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <span class="badge bg-light text-dark border"><i class="bi bi-geo-alt me-1"></i>{{ $education->location }}</span>
+                  <h5 class="education-subtitle">{{ $education->subtitle }}</h5>
+                  <div class="education-meta">
+                    @if($education->location)
+                    <span class="education-location">
+                      <i class="bi bi-geo-alt"></i>{{ $education->location }}
+                    </span>
+                    @endif
                     @if($education->grade)
-                    <span class="badge bg-primary">Grade: {{ $education->grade }}</span>
+                    <span class="education-grade">
+                      <i class="bi bi-award"></i>{{ $education->grade }}
+                    </span>
                     @endif
                   </div>
-                  <p class="mb-0">{{ $education->description }}</p>
+                  @if($education->description)
+                  <div class="education-description">
+                    {{ $education->description }}
+                  </div>
+                  @endif
                 </div>
               </div>
             </div>
@@ -219,42 +231,123 @@
         </div>
       </section>
       <!-- =================== End Education Section =================== -->
-      <!-- =================== Testimonials Section =================== -->
-      <section id="testimonials" class="testimonials section light-background">
-        <div class="container section-title" data-aos="fade-up">
-          <h2>Testimonials</h2>
-        </div>
 
-        <div class="container" data-aos="fade-up" data-aos-delay="100">
-          <!-- Check if $testimonials exists and has items -->
-          @if(isset($testimonials) && $testimonials->count())
-            <div class="swiper init-swiper">
-              <div class="swiper-wrapper">
-                @foreach($testimonials as $testimonial)
-                  <div class="swiper-slide">
-                    <div class="testimonial-item">
-                      <p>
-                        <i class="bi bi-quote quote-icon-left"></i>
-                        <span>{{ $testimonial->quote }}</span>
-                        <i class="bi bi-quote quote-icon-right"></i>
-                      </p>
-                      <img src="{{ asset($testimonial->image_url) }}" class="testimonial-img" alt="{{ $testimonial->name }}">
-                      <h3>{{ $testimonial->name }}</h3>
-                      <h4>{{ $testimonial->role }}</h4>
-                    </div>
-                  </div>
-                @endforeach
-              </div>
-              <div class="swiper-pagination"></div>
-            </div>
-          @else
-            <p>No testimonials available.</p>
-          @endif
-        </div>
+      <!-- Languages Section -->
+      <section id="languages" class="languages section">
+          <div class="container section-title" data-aos="fade-up">
+              <h2>Languages</h2>
+          </div>
+
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+              <ul>
+                  @foreach ($languages as $language)
+                      <li><strong>{{ $language->name }}:</strong> {{ $language->proficiency }}</li>
+                  @endforeach
+              </ul>
+          </div>
       </section>
 
+      <!-- Experience Section -->
+      <section id="experience" class="experience section">
+          <div class="container section-title" data-aos="fade-up">
+              <h2>Experience</h2>
+          </div>
 
-      <!-- =================== End Testimonials Section =================== -->
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+              @foreach ($experiences as $experience)
+                  <div class="experience-item mb-4">
+                      <h4>{{ $experience->organization }}</h4>
+                      <p><em>{{ $experience->start_date }} - {{ $experience->end_date ?? 'Present' }}</em></p>
+                      <p>{{ $experience->description }}</p>
+                  </div>
+              @endforeach
+
+              <div class="text-center mt-4">
+                  <a href="{{ route('experiences.all') }}" class="btn btn-primary">See More</a>
+              </div>
+          </div>
+      </section>
+
+            <!-- Certificates Section -->
+      <section id="certificates" class="certificates section">
+          <div class="container section-title" data-aos="fade-up">
+              <h2>Certificates</h2>
+          </div>
+
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+              @foreach ($certificates as $certificate)
+                  <div class="certificate-item mb-4">
+                      <h3>{{ $certificate->title }}</h3>
+                      <h4>{{ $certificate->organization }}</h4>
+                      <p><em>{{ $certificate->awarded_date ?? 'N/A' }}</em></p>
+                      <p>{{ $certificate->description }}</p>
+                  </div>
+              @endforeach
+          </div>
+      </section>
+
+      <!-- Trainings Section -->
+      <section id="trainings" class="trainings section">
+          <div class="container section-title" data-aos="fade-up">
+              <h2>Trainings</h2>
+          </div>
+
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+              @foreach ($trainings as $training)
+                  <div class="training-item mb-4">
+                      <h3>{{ $training->title }}</h3>
+                      <h4>{{ $training->organization }}</h4>
+                      <p><em>{{ $training->start_date ?? 'N/A' }} - {{ $training->end_date ?? 'Present' }}</em></p>
+                      <p>{{ $training->description }}</p>
+                  </div>
+              @endforeach
+              <div class="text-center mt-4">
+                  <a href="{{ route('trainings.all') }}" class="btn btn-primary">See More</a>
+              </div>
+          </div>
+      </section>
+
+      <!-- Awards Section -->
+      <section id="awards" class="awards section">
+          <div class="container section-title" data-aos="fade-up">
+              <h2>Awards</h2>
+          </div>
+
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+              @foreach ($awards as $award)
+                  <div class="award-item mb-4">
+                      <h3>{{ $award->title }}</h3>
+                      <h4>{{ $award->organization }}</h4>
+                      <p><em>{{ $award->date_given ?? 'N/A' }}</em></p>
+                      <p>{{ $award->description }}</p>
+                  </div>
+              @endforeach
+          </div>
+      </section>
+
+      <!-- Testimonials Section -->
+      <section id="testimonials" class="testimonials section">
+          <div class="container section-title" data-aos="fade-up">
+              <h2>References</h2>
+          </div>
+
+          <div class="container" data-aos="fade-up" data-aos-delay="100">
+              <div class="testimonial-carousel">
+                  @foreach ($testimonials as $testimonial)
+                      <div class="testimonial-card">
+                          <img src="{{ asset('storage/' . $testimonial->image_url) }}" alt="{{ $testimonial->name }}" class="testimonial-image">
+                          <div class="testimonial-details">
+                              <h3>{{ $testimonial->name }}</h3>
+                              <h4>{{ $testimonial->role }}</h4>
+                              <p>{{ $testimonial->organization }}</p>
+                              <p><a href="mailto:{{ $testimonial->email }}">{{ $testimonial->email }}</a></p>
+                              <p>{{ $testimonial->phone }}</p>
+                          </div>
+                      </div>
+                  @endforeach
+              </div>
+          </div>
+      </section>
 
       <!-- =================== Contact Section =================== -->
       <section id="contact" class="contact section">

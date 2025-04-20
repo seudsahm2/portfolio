@@ -1,4 +1,3 @@
-
 @extends('layouts.admin')
 
 @section('content')
@@ -14,8 +13,20 @@
             <input type="text" name="role" id="role" class="form-control" required>
         </div>
         <div class="form-group">
-            <label for="image_url">Image URL</label>
-            <input type="file" name="image_url" id="image_url" class="form-control" required>
+            <label for="organization">Organization</label>
+            <input type="text" name="organization" id="organization" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email" class="form-control" required>
+        </div>
+        <div class="form-group">
+            <label for="phone">Phone</label>
+            <input type="text" name="phone" id="phone" class="form-control">
+        </div>
+        <div class="form-group">
+            <label for="image_url">Image</label>
+            <input type="file" name="image_url" id="image_url" class="form-control">
         </div>
         <div class="form-group">
             <label for="quote">Quote</label>

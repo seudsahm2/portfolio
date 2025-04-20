@@ -9,14 +9,16 @@ Route::get('/', [PortfolioController::class, 'index'])->name('welcome');
 
 // Contact Form Route
 Route::post('/contact', [UserContactController::class, 'storeContact'])->name('contact.save');
+Route::get('/experiences', [PortfolioController::class, 'allExperiences'])->name('experiences.all');
+Route::get('/trainings', [PortfolioController::class, 'allTrainings'])->name('trainings.all');
 
 // Dashboard Route
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 // Profile Routes
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

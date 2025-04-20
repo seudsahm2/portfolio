@@ -227,3 +227,31 @@
   document.addEventListener('scroll', navmenuScrollspy);
 
 })();
+
+document.addEventListener('DOMContentLoaded', () => {
+  const themeToggle = document.getElementById('theme-toggle');
+  const themeIcon = document.getElementById('theme-icon');
+
+  // Set dark mode as the default theme
+  const savedTheme = localStorage.getItem('theme');
+  if (!savedTheme || savedTheme === 'dark') {
+      document.body.classList.add('dark-mode');
+      themeIcon.classList.replace('bi-moon', 'bi-sun');
+      localStorage.setItem('theme', 'dark'); // Save dark mode as default
+  }
+
+  // Toggle theme on button click
+  themeToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark-mode');
+      const isDarkMode = document.body.classList.contains('dark-mode');
+
+      // Update the icon
+      if (isDarkMode) {
+          themeIcon.classList.replace('bi-moon', 'bi-sun');
+          localStorage.setItem('theme', 'dark'); // Save preference
+      } else {
+          themeIcon.classList.replace('bi-sun', 'bi-moon');
+          localStorage.setItem('theme', 'light'); // Save preference
+      }
+  });
+});
