@@ -6,9 +6,9 @@
     <!-- Meta and Title -->
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-    <title>{{ optional($about)->name ?? 'No Name Provided' }}Portfolio</title>
-    <meta content="" name="description">
-    <meta content="" name="keywords">
+    <title>{{ optional($about)->name ?? 'Ahmed Jafer Dawud' }} | Business Consultant, ILO Master Trainer & SME Expert</title>
+    <meta content="Ahmed Jafer Dawud: Certified ILO Master Trainer, Business Development Consultant, and Entrepreneurship Expert in Addis Ababa. Offering SME Training, Financial Education, and Leadership Coaching." name="description">
+    <meta content="Business Consultant Ethiopia, SME Training, ILO Master Trainer, Entrepreneurship Development, Financial Education Trainer, Digital Marketing Expert, Leadership Coaching" name="keywords">
 
     <!-- Favicons -->
     <link href="{{ asset('assets/img/favicon.png') }}" rel="icon">

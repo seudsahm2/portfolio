@@ -13,7 +13,7 @@
 
     <!-- Logo -->
     <a href="{{ url('/') }}" class="logo d-flex align-items-center justify-content-center">
-        <h4 class="sitename">{{ optional($about)->name ?? 'No Name Provided' }}</h4>
+    <h4 class="sitename">{{ optional($about)->name ?? 'Ahmed Jafer Dawud | Business Consultant & Master Trainer' }}</h4>
     </a>
 
     <!-- Dark/Light Mode Toggle Button -->
@@ -25,9 +25,9 @@
 
     <!-- Social Links -->
     <div class="social-links text-center">
-        <a href="https://web.facebook.com/ahmed.jafer.54" class="facebook"><i class="bi bi-facebook"></i></a>
-        <a href="https://www.instagram.com/ahmed_jaferrr?igsh=c2pleDYzZ2dheG5n" class="instagram"><i class="bi bi-instagram"></i></a>
-        <a href="https://www.linkedin.com/in/ahmed-jafer-dawud-7726b8199" class="linkedin"><i class="bi bi-linkedin"></i></a>
+        <a href="https://web.facebook.com/ahmed.jafer.54" class="facebook" aria-label="Facebook Profile"><i class="bi bi-facebook"></i></a>
+        <a href="https://www.instagram.com/ahmed_jaferrr?igsh=c2pleDYzZ2dheG5n" class="instagram" aria-label="Instagram Profile"><i class="bi bi-instagram"></i></a>
+        <a href="https://www.linkedin.com/in/ahmed-jafer-dawud-7726b8199" class="linkedin" aria-label="LinkedIn Profile"><i class="bi bi-linkedin"></i></a>
     </div>
 
     <!-- Navigation Menu -->

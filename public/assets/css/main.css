@@ -2,12 +2,14 @@
 1. FONT & COLOR VARIABLES
 ======================================================== */
 :root {
+--eyob:"black";
 --default-font: "Poppins", sans-serif;
 --heading-font: "Merriweather", serif;
 --nav-font: "Poppins", sans-serif;
 
 /* Light Mode */
 --background-color: linear-gradient(135deg, #f4e9dc, #e5cbaa);
+--header-background: #1F2937;
 --section-background: linear-gradient(to right, #f6eee3, #e3d0b7);
 --card-background: rgba(255, 255, 255, 0.25);
 --overlay-color: rgba(60, 43, 29, 0.05);
@@ -120,7 +122,7 @@ color: color-mix(in srgb, var(--accent-color), transparent 25%);
 --------------------------------------------------------------*/
 .header {
   color: var(--default-color);
-  background-color: var(--background-color);
+  background-color: var(--header-background);
   position: fixed;
   top: 0;
   left: 0;
@@ -131,7 +133,7 @@ color: color-mix(in srgb, var(--accent-color), transparent 25%);
   z-index: 997;
   border-right: 1px solid color-mix(in srgb, var(--default-color), transparent 90%);
   transition: all ease-in-out 0.3s;
-  margin-bottom: 50px;
+  padding-bottom: 50px;
 }
 
 .header .profile-img img {
@@ -635,6 +637,10 @@ body:not(.dark-mode) .navmenu .active {
   }
   
   @media (max-width: 768px) {
+    .hero {
+      min-height: 60vh;
+    }
+
     .hero h2 {
       font-size: 32px;
     }
@@ -1803,17 +1809,7 @@ body.dark-mode .testimonial-card:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 
-/* Automatic Scrolling for Mobile */
-@media (max-width: 768px) {
-    .testimonial-carousel {
-        animation: autoScroll 15s linear infinite;
-    }
 
-    @keyframes autoScroll {
-        0% { transform: translateX(0); }
-        100% { transform: translateX(calc(-100% + 100vw)); }
-    }
-}
 
 /*--------------------------------------------------------------
 # Footer

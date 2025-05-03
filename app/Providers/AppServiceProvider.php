@@ -7,7 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use App\Http\Middleware\RestrictIPMiddleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\URL;
-
+use App\Console\Commands\GenerateSitemap; 
+use Illuminate\Console\Application as Artisan;
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -15,8 +16,13 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                GenerateSitemap::class,
+            ]);
+        }
     }
+
 
     /**
      * Bootstrap any application services.
@@ -31,7 +37,5 @@ class AppServiceProvider extends ServiceProvider
             $about = About::first(); // Fetch the first About record
             $view->with('about', $about); // Pass it to the view
         });
-
-
     }
 }
