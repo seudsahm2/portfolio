@@ -5,13 +5,30 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build --turbopack",
-    "start": "next start",
-    "lint": "eslint"
+  "start": "next start",
+  "lint": "eslint",
+  "gen:openapi": "openapi-typescript http://localhost:8000/schema/?format=openapi-json -o src/lib/api.types.ts"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.5.0"
+  "react": "19.1.0",
+  "react-dom": "19.1.0",
+  "next": "15.5.0",
+  "@tanstack/react-query": "^5",
+  "@tanstack/react-query-devtools": "^5",
+  "zod": "^3",
+  "react-hook-form": "^7",
+  "@hookform/resolvers": "^3",
+  "date-fns": "^3",
+  "clsx": "^2",
+  "tailwind-merge": "^2",
+  "react-markdown": "^9",
+  "remark-gfm": "^4",
+  "rehype-sanitize": "^6",
+  "dompurify": "^3",
+  "prism-react-renderer": "^2",
+  "react-hot-toast": "^2",
+  "reconnecting-websocket": "^4",
+  "@microsoft/fetch-event-source": "^2"
   },
   "devDependencies": {
     "typescript": "^5",
@@ -21,7 +38,10 @@
     "@tailwindcss/postcss": "^4",
     "tailwindcss": "^4",
     "eslint": "^9",
-    "eslint-config-next": "15.5.0",
-    "@eslint/eslintrc": "^3"
+  "eslint-config-next": "15.5.0",
+  "@eslint/eslintrc": "^3",
+  "openapi-typescript": "^7",
+  "prettier": "^3",
+  "eslint-config-prettier": "^9"
   }
 }
