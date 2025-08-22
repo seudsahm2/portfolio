@@ -4,8 +4,9 @@ import Link from "next/link";
 
 export const revalidate = 60;
 
-export default async function BlogPostPage({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
+export default async function BlogPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id: idStr } = await params;
+  const id = Number(idStr);
   let prevId: number | null = null;
   let nextId: number | null = null;
   try {
