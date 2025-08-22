@@ -9,7 +9,10 @@ export default function Header() {
           seud.dev
         </Link>
         <nav className="flex items-center gap-4 text-sm">
+          <Link href="/about" className="hover:underline underline-offset-4">About</Link>
           <Link href="/projects" className="hover:underline underline-offset-4">Projects</Link>
+          <Link href="/skills" className="hover:underline underline-offset-4">Skills</Link>
+          <Link href="/experiences" className="hover:underline underline-offset-4">Experience</Link>
           <Link href="/blog" className="hover:underline underline-offset-4">Blog</Link>
           <Link href="/contact" className="hover:underline underline-offset-4">Contact</Link>
           <ThemeToggle />

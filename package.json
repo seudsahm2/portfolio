@@ -7,7 +7,8 @@
     "build": "next build --turbopack",
   "start": "next start",
   "lint": "eslint",
-  "gen:openapi": "openapi-typescript http://localhost:8000/schema/?format=openapi-json -o src/lib/api.types.ts"
+  "typecheck": "tsc --noEmit",
+   "gen:openapi": "openapi-typescript http://localhost:8000/api/schema/json/ -o src/lib/api.types.ts"
   },
   "dependencies": {
   "react": "19.1.0",

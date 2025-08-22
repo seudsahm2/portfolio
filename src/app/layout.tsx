@@ -3,6 +3,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Providers from "./providers";
+import ChatDock from "@/components/chat/ChatDock";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,13 +42,13 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}
-      >
-        <Header />
-        <main className="min-h-[calc(100vh-8rem)]">
-          {children}
-        </main>
-        <Footer />
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}>
+        <Providers>
+          <Header />
+          <main className="min-h-[calc(100vh-8rem)]">{children}</main>
+          <Footer />
+          <ChatDock />
+        </Providers>
       </body>
     </html>
   );

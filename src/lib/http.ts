@@ -1,6 +1,7 @@
 "use client";
 
-import { API_BASE_URL, env } from "./env";
+import { API_BASE_URL, AUTH_HEADER_PREFIX, env } from "./env";
+import { getAccessToken, refresh as refreshToken, clearTokens } from "./auth";
 
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
@@ -40,16 +41,33 @@ export async function http<TResp = unknown, TBody = unknown>(opts: HttpOptions<T
   const signal = opts.signal ?? controller.signal;
   try {
     const url = buildUrl(opts.path, opts.query);
-    const res = await fetch(url, {
-      method: opts.method ?? (opts.body ? "POST" : "GET"),
-      headers: {
+    const doFetch = async (withAuth = true) => {
+      const headers: Record<string, string> = {
         "Content-Type": "application/json",
         ...(opts.headers || {}),
-      },
-      body: opts.body ? JSON.stringify(opts.body) : undefined,
-      signal,
-      // credentials: 'include', // enable if using cookies/JWT later
-    });
+      };
+      if (withAuth) {
+        const token = getAccessToken();
+        if (token) headers["Authorization"] = `${AUTH_HEADER_PREFIX} ${token}`;
+      }
+      return fetch(url, {
+        method: opts.method ?? (opts.body ? "POST" : "GET"),
+        headers,
+        body: opts.body ? JSON.stringify(opts.body) : undefined,
+        signal,
+      });
+    };
+
+    let res = await doFetch(true);
+    // If unauthorized, try refresh once
+    if (res.status === 401) {
+  const newAccess = await refreshToken();
+      if (newAccess) {
+        res = await doFetch(true);
+      } else {
+        clearTokens();
+      }
+    }
     const contentType = res.headers.get("content-type") || "";
     const isJson = contentType.includes("application/json");
     const data = isJson ? await res.json().catch(() => null) : await res.text();
