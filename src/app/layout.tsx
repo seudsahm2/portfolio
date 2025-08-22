@@ -8,6 +8,7 @@ import ChatDock from "@/components/chat/ChatDock";
 import AnalyticsConsent from "@/components/seo/AnalyticsConsent";
 import SeoJsonLd from "@/components/seo/SeoJsonLd";
 import Script from "next/script";
+import { Analytics } from "@vercel/analytics/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,6 +73,7 @@ export default function RootLayout({
           <ChatDock />
           <AnalyticsConsent />
           <SeoJsonLd />
+          <Analytics />
         </Providers>
       </body>
     </html>

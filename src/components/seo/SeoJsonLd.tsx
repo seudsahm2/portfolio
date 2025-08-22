@@ -1,6 +1,7 @@
 "use client";
 
 import { useProfiles } from "@/lib/api.hooks";
+import { env } from "@/lib/env";
 
 function ScriptTag({ json }: { json: unknown }) {
   return (
@@ -13,7 +14,8 @@ export default function SeoJsonLd() {
   const p = profiles.data?.[0];
   const name = p?.full_name || "Seud";
   const title = p?.title || "Software Developer";
-  const url = typeof window !== "undefined" ? window.location.origin : "";
+  // Use a stable URL from env to avoid SSR/CSR mismatches
+  const url = env.NEXT_PUBLIC_SITE_URL;
 
   const person = {
     "@context": "https://schema.org",
