@@ -58,7 +58,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}>
         <Providers>
           {/* Google tag (gtag.js) - Manual GA4 install as requested */}
-          <Script src="https://www.googletagmanager.com/gtag/js?id=G-LFX02TQLHD" strategy="afterInteractive" />
+          <Script src="https://www.googletagmanager.com/gtag/js?id=G-LFX02TQLHD" strategy="beforeInteractive" />
           <Script id="ga4-init" strategy="afterInteractive">{
             `window.dataLayer = window.dataLayer || [];
              function gtag(){dataLayer.push(arguments);} 
