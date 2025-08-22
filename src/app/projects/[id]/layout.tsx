@@ -1,13 +1,13 @@
-import type { Metadata, ResolvingMetadata } from "next";
+import type { Metadata } from "next";
 import { client } from "@/lib/api.client";
 
 export const revalidate = 60; // ISR: revalidate every minute
 
 export async function generateMetadata(
-  { params }: { params: { id: string } },
-  _parent: ResolvingMetadata
+  props: { params: Promise<{ id: string }> }
 ): Promise<Metadata> {
-  const id = Number(params.id);
+  const { id: idStr } = await props.params;
+  const id = Number(idStr);
   try {
     const p = await client.getProject(id);
     const title = p.title ?? "Project";

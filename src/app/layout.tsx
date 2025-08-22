@@ -5,6 +5,8 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Providers from "./providers";
 import ChatDock from "@/components/chat/ChatDock";
+import AnalyticsConsent from "@/components/seo/AnalyticsConsent";
+import SeoJsonLd from "@/components/seo/SeoJsonLd";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,6 +25,16 @@ export const metadata: Metadata = {
     template: "%s | Seud Portfolio",
   },
   description: "Personal portfolio with projects, blog, and an AI assistant.",
+  keywords: [
+    "Seud",
+    "Portfolio",
+    "Software Developer",
+    "AI",
+    "AI chatbot portfolio",
+    "Full Stack",
+    "Projects",
+    "Blog",
+  ],
   icons: {
     icon: "/favicon.ico",
   },
@@ -48,6 +60,8 @@ export default function RootLayout({
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>
           <Footer />
           <ChatDock />
+          <AnalyticsConsent />
+          <SeoJsonLd />
         </Providers>
       </body>
     </html>
