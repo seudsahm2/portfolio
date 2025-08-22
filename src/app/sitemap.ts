@@ -1,12 +1,18 @@
 import type { MetadataRoute } from "next";
 import { env } from "@/lib/env";
 
-async function fetchAll<T>(url: string): Promise<T[]> {
+// Don't pre-render at build: generate on request to avoid CI timeouts
+export const dynamic = "force-dynamic";
+
+async function fetchAll<T>(url: string, { timeoutMs = 5000, maxPages = 2 }: { timeoutMs?: number; maxPages?: number } = {}): Promise<T[]> {
   const items: T[] = [];
   let next: string | null = url;
-  for (let i = 0; i < 10 && next; i++) {
+  for (let i = 0; i < maxPages && next; i++) {
     try {
-      const res = await fetch(next, { cache: "force-cache" });
+      const ac = new AbortController();
+      const t = setTimeout(() => ac.abort(), timeoutMs);
+      const res = await fetch(next, { cache: "no-store", signal: ac.signal });
+      clearTimeout(t);
       if (!res.ok) break;
       const data = (await res.json()) as {
         results?: T[];
@@ -23,7 +29,7 @@ async function fetchAll<T>(url: string): Promise<T[]> {
       } else {
         break;
       }
-    } catch {
+  } catch {
       break;
     }
   }
@@ -46,10 +52,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   ].map((path) => ({ url: `${site}${path}`, lastModified: new Date(), changeFrequency: "weekly", priority: 0.7 }));
 
   // Dynamic routes: projects and blogposts
+  // If API base is missing, return base only
+  if (!api) {
+    return base;
+  }
+
+  // Try to fetch dynamic routes quickly, but don't block sitemap on slow API
   const [projects, posts] = await Promise.all([
     fetchAll<{ id: number }>(`${api}/api/projects/?page=1`),
     fetchAll<{ id: number }>(`${api}/api/blogposts/?page=1`),
-  ]);
+  ]).catch(() => [[], []] as [Array<{ id: number }>, Array<{ id: number }>]);
 
   const projectRoutes: MetadataRoute.Sitemap = projects.map((p) => ({
     url: `${site}/projects/${p.id}`,
