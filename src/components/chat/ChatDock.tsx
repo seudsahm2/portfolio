@@ -53,7 +53,7 @@ export default function ChatDock() {
     const user: ChatMessage = { id: crypto.randomUUID(), role: "user", content: text, created_at: Date.now() };
     setMessages((prev) => [...prev, user]);
     setInput("");
-    m.mutate({ provider: "google", question: text, structured: true, top_n: 6 }, {
+  m.mutate({ provider: "google", question: text, structured: true, top_n: 6 }, {
       onSuccess: (res: components["schemas"]["ChatLog"]) => {
         // answer_json is unknown; if it's an object with a text field, use it.
         let structured: string | undefined;
@@ -66,8 +66,20 @@ export default function ChatDock() {
         const assistant: ChatMessage = { id: crypto.randomUUID(), role: "assistant", content: String(answer), created_at: Date.now() };
         setMessages((prev) => [...prev, assistant]);
       },
-      onError: (err) => {
-        const assistant: ChatMessage = { id: crypto.randomUUID(), role: "assistant", content: `Error: ${String(err)}`, created_at: Date.now() };
+      onError: (err: unknown) => {
+        type HttpLikeError = { data?: unknown } | { message?: string } | unknown;
+        const e = err as HttpLikeError;
+        let msg = `Error: ${String(err)}`;
+        // Attempt to extract message from fetch HttpError shape if present
+        if (e && typeof e === "object" && "data" in e) {
+          const data = (e as { data?: unknown }).data;
+          if (data && typeof data === 'object') {
+            const obj = data as Record<string, unknown>;
+            const maybeDetail = (obj.detail ?? obj.error ?? obj.message);
+            if (typeof maybeDetail === 'string') msg = maybeDetail;
+          }
+        }
+        const assistant: ChatMessage = { id: crypto.randomUUID(), role: "assistant", content: msg, created_at: Date.now() };
         setMessages((prev) => [...prev, assistant]);
       }
     });

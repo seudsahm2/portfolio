@@ -37,7 +37,10 @@ export class HttpError extends Error {
 
 export async function http<TResp = unknown, TBody = unknown>(opts: HttpOptions<TBody>): Promise<TResp> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), env.NEXT_PUBLIC_REQUEST_TIMEOUT_MS);
+  // Extend timeout for long-running chat requests
+  const isChat = opts.path.replace(/^\//, "").startsWith("api/chat/");
+  const timeoutMs = isChat ? Math.max(env.NEXT_PUBLIC_REQUEST_TIMEOUT_MS, 60000) : env.NEXT_PUBLIC_REQUEST_TIMEOUT_MS;
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
   const signal = opts.signal ?? controller.signal;
   try {
     const url = buildUrl(opts.path, opts.query);
