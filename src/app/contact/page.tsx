@@ -31,10 +31,10 @@ export default function ContactPage() {
   }, [lastSentAt, remainingMs]);
 
   return (
-    <div className="max-w-xl mx-auto px-4 py-8 space-y-4">
-      <h1 className="text-2xl font-semibold">Contact</h1>
+    <div className="max-w-xl mx-auto px-4 py-10 space-y-4">
+      <h1 className="text-3xl font-semibold">Contact</h1>
       <form
-        className="space-y-3"
+        className="space-y-3 rounded-xl border border-neutral-200 dark:border-neutral-800 p-5 bg-white/70 dark:bg-neutral-900/70 glass"
         onSubmit={(e) => {
           e.preventDefault();
           const parsed = Schema.safeParse({ name, email, message });

@@ -14,9 +14,9 @@ export default function LoginPage() {
 
   return (
     <div className="max-w-sm mx-auto px-4 py-10 space-y-4">
-      <h1 className="text-2xl font-semibold">Login</h1>
+      <h1 className="text-3xl font-semibold gradient-text">Login</h1>
       <form
-        className="space-y-3"
+        className="space-y-3 rounded-xl gradient-border p-5 bg-white/70 dark:bg-neutral-900/70 hover-card"
         onSubmit={async (e) => {
           e.preventDefault();
           setPending(true);
@@ -46,7 +46,7 @@ export default function LoginPage() {
           onChange={(e) => setPassword(e.target.value)}
           required
         />
-        <div className="flex items-center gap-3">
+  <div className="flex items-center gap-3">
           <Button type="submit" disabled={pending}>{pending ? "Signing in..." : "Sign in"}</Button>
           {error && <span className="text-red-600 text-sm">{error}</span>}
         </div>

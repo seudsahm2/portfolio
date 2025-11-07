@@ -43,9 +43,12 @@ export async function http<TResp = unknown, TBody = unknown>(opts: HttpOptions<T
     const url = buildUrl(opts.path, opts.query);
     const doFetch = async (withAuth = true) => {
       const headers: Record<string, string> = {
-        "Content-Type": "application/json",
         ...(opts.headers || {}),
       };
+      // Only set Content-Type when sending a body to reduce unnecessary CORS preflights on GET
+      if (opts.body && !headers["Content-Type"]) {
+        headers["Content-Type"] = "application/json";
+      }
       if (withAuth) {
         const token = getAccessToken();
         if (token) headers["Authorization"] = `${AUTH_HEADER_PREFIX} ${token}`;
@@ -59,13 +62,20 @@ export async function http<TResp = unknown, TBody = unknown>(opts: HttpOptions<T
     };
 
     let res = await doFetch(true);
-    // If unauthorized, try refresh once
+    // If unauthorized, try refresh once. If still unauthorized or refresh fails, retry once WITHOUT auth to allow public read.
     if (res.status === 401) {
-  const newAccess = await refreshToken();
+      const newAccess = await refreshToken();
       if (newAccess) {
         res = await doFetch(true);
+        if (res.status === 401) {
+          // Token invalid even after refresh; drop tokens and retry as anonymous
+          clearTokens();
+          res = await doFetch(false);
+        }
       } else {
+        // No valid refresh; clear and retry as anonymous (for public endpoints)
         clearTokens();
+        res = await doFetch(false);
       }
     }
     const contentType = res.headers.get("content-type") || "";

@@ -2,11 +2,9 @@
 
 import Link from "next/link";
 import { useProject } from "@/lib/api.hooks";
-import { useAuthGuard } from "@/lib/useAuthGuard";
 import { Badge, Button } from "@/components/ui";
 
 export default function ProjectDetailClient({ id }: { id: number }) {
-  useAuthGuard();
   const q = useProject(id);
   const p = q.data;
 
@@ -30,11 +28,11 @@ export default function ProjectDetailClient({ id }: { id: number }) {
     <div className="max-w-4xl mx-auto px-4 py-8 space-y-6">
       {cover ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={cover} alt="" className="w-full h-64 object-cover rounded-lg" />
+        <img src={cover} alt="" className="w-full h-64 object-cover rounded-xl" />
       ) : null}
 
       <header>
-        <h1 className="text-2xl font-semibold">{p.title}</h1>
+        <h1 className="text-3xl font-semibold gradient-text">{p.title}</h1>
         {p.created_at && (
           <div className="text-sm text-neutral-600 dark:text-neutral-400">{p.created_at}</div>
         )}
@@ -61,7 +59,7 @@ export default function ProjectDetailClient({ id }: { id: number }) {
         )}
       </div>
 
-      <div className="pt-2">
+  <div className="pt-2">
         <Link href="/projects"><Button variant="ghost">← Back to projects</Button></Link>
       </div>
     </div>

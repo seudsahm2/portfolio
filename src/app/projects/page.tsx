@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import { useProjectsInfinite, useSkills } from "@/lib/api.hooks";
 import { Button, Badge } from "@/components/ui";
-import { useAuthGuard } from "@/lib/useAuthGuard";
+import { Card, CardContent } from "@/components/ui";
 
 function ProjectCard({
   title,
@@ -27,15 +27,15 @@ function ProjectCard({
 }) {
   const cover = image_url || image || undefined;
   return (
-    <li className="rounded-lg border overflow-hidden">
+    <li className="rounded-xl border border-neutral-200 dark:border-neutral-800 overflow-hidden bg-white/70 dark:bg-neutral-900/70 glass hover:shadow-xl transition-all">
       {cover ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={cover} alt="" className="w-full h-40 object-cover" />
+        <img src={cover} alt="" className="w-full h-44 object-cover" />
       ) : (
-        <div className="h-40 w-full bg-black/5 dark:bg-white/5" />
+        <div className="h-44 w-full bg-black/5 dark:bg-white/5" />
       )}
-      <div className="p-4 space-y-2">
-        <div className="font-medium">
+      <div className="p-5 space-y-2">
+        <div className="text-lg font-medium tracking-tight hover:underline underline-offset-4">
           <Link href={`/projects/${id}`}>{title}</Link>
         </div>
         {description && (
@@ -62,7 +62,6 @@ function ProjectCard({
 }
 
 export default function ProjectsPage() {
-  useAuthGuard();
   const skills = useSkills();
   const [search, setSearch] = useState("");
   const [featured, setFeatured] = useState<boolean | undefined>(undefined);
@@ -80,15 +79,15 @@ export default function ProjectsPage() {
   const items = q.data?.items || [];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-4">
+    <div className="max-w-6xl mx-auto px-4 py-10 space-y-6">
       <div className="flex items-center justify-between gap-3 flex-wrap">
-        <h1 className="text-2xl font-semibold">Projects</h1>
-        <div className="flex items-center gap-2 text-sm">
+        <h1 className="text-3xl font-semibold">Projects</h1>
+        <div className="flex items-center gap-2 text-sm bg-white/60 dark:bg-neutral-900/60 glass p-2 rounded-lg border border-neutral-200 dark:border-neutral-800">
           <input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search projects..."
-            className="h-9 px-3 rounded border bg-transparent"
+            className="h-9 px-3 rounded border bg-transparent focus:outline-none focus:ring-2 focus:ring-brand-start/30"
           />
           <select
             value={featured === undefined ? "all" : featured ? "yes" : "no"}
@@ -137,7 +136,7 @@ export default function ProjectsPage() {
         <p className="text-neutral-600 dark:text-neutral-300">No projects found.</p>
       ) : (
         <>
-          <ul className="grid md:grid-cols-2 gap-4">
+          <ul className="grid md:grid-cols-2 gap-6">
             {items.map((p) => (
               <ProjectCard
                 key={p.id}
@@ -152,7 +151,7 @@ export default function ProjectsPage() {
               />
             ))}
           </ul>
-          <div className="pt-4 flex items-center justify-center">
+          <div className="pt-6 flex items-center justify-center">
             {q.data?.hasMore ? (
               <Button onClick={() => q.fetchNextPage()} disabled={q.isFetchingNextPage}>
                 {q.isFetchingNextPage ? "Loading..." : "Load more"}

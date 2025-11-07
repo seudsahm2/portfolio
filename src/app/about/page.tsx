@@ -2,16 +2,14 @@
 
 import Link from "next/link";
 import { useProfiles } from "@/lib/api.hooks";
-import { useAuthGuard } from "@/lib/useAuthGuard";
 
 export default function AboutPage() {
-  useAuthGuard();
   const q = useProfiles();
   const profile = q.data?.[0];
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-4">
-      <h1 className="text-2xl font-semibold">About</h1>
+    <div className="max-w-3xl mx-auto px-4 py-10 space-y-4">
+      <h1 className="text-3xl font-semibold gradient-text">About</h1>
 
       {q.isLoading ? (
         <div className="space-y-3">
@@ -24,7 +22,7 @@ export default function AboutPage() {
       ) : !profile ? (
         <p className="text-neutral-600 dark:text-neutral-300">No profile yet.</p>
       ) : (
-        <article className="space-y-3">
+        <article className="space-y-3 rounded-xl gradient-border p-6 bg-white/70 dark:bg-neutral-900/70 hover-card">
           <div>
             <div className="text-xl font-medium">{profile.full_name}</div>
             {profile.title && (

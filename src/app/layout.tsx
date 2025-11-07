@@ -9,6 +9,7 @@ import AnalyticsConsent from "@/components/seo/AnalyticsConsent";
 import SeoJsonLd from "@/components/seo/SeoJsonLd";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
+import DevOverlay from "@/components/DevOverlay";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -73,7 +74,8 @@ export default function RootLayout({
           <ChatDock />
           <AnalyticsConsent />
           <SeoJsonLd />
-          <Analytics />
+          {process.env.NODE_ENV === "production" && <Analytics />}
+          {process.env.NODE_ENV !== "production" && <DevOverlay />}
         </Providers>
       </body>
     </html>

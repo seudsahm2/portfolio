@@ -2,10 +2,8 @@
 
 import { useMemo, useState } from "react";
 import { useSkills } from "@/lib/api.hooks";
-import { useAuthGuard } from "@/lib/useAuthGuard";
 
 export default function SkillsPage() {
-  useAuthGuard();
   const q = useSkills();
   const [filter, setFilter] = useState<number | "all">("all");
 
@@ -25,14 +23,14 @@ export default function SkillsPage() {
   }, [q.data, filter]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-4">
-        <h1 className="text-2xl font-semibold">Skills</h1>
+    <div className="max-w-4xl mx-auto px-4 py-10 space-y-4">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-semibold gradient-text">Skills</h1>
         <div className="flex gap-2 text-sm">
           {levelChips.map((lv) => (
             <button
               key={String(lv)}
-              className={`px-3 py-1 rounded-full border ${filter === lv ? "bg-neutral-900 text-white dark:bg-white dark:text-black" : ""}`}
+              className={`px-3 py-1 rounded-full border hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors ${filter === lv ? "bg-neutral-900 text-white dark:bg-white dark:text-black" : ""}`}
               onClick={() => setFilter(lv)}
               title={lv === "all" ? "All" : `Level ${lv}`}
             >
@@ -51,9 +49,9 @@ export default function SkillsPage() {
       ) : q.isError ? (
         <div className="text-red-600">Failed to load skills.</div>
       ) : filtered.length ? (
-        <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-3">
+        <ul className="grid sm:grid-cols-2 md:grid-cols-3 gap-4">
           {filtered.map((s) => (
-            <li key={s.id} className="rounded-lg border p-3 flex items-center justify-between">
+            <li key={s.id} className="rounded-xl gradient-border p-4 flex items-center justify-between bg-white/70 dark:bg-neutral-900/70 hover-card">
               <span>{s.name}</span>
               {typeof s.level === "number" && (
                 <span className="text-xs text-neutral-600 dark:text-neutral-400">Lvl {s.level}</span>

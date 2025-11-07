@@ -1,10 +1,8 @@
 "use client";
 
 import { useBlogPost } from "@/lib/api.hooks";
-import { useAuthGuard } from "@/lib/useAuthGuard";
 
 export default function BlogPostClient({ id }: { id: number }) {
-  useAuthGuard();
   const q = useBlogPost(id);
   const b = q.data;
 
@@ -24,14 +22,14 @@ export default function BlogPostClient({ id }: { id: number }) {
   const cover = b.cover_image_url || b.cover_image || undefined;
 
   return (
-    <article className="max-w-3xl mx-auto px-4 py-8 space-y-4">
+    <article className="max-w-3xl mx-auto px-4 py-10 space-y-4 rounded-xl gradient-border bg-white/70 dark:bg-neutral-900/70">
       <header className="space-y-1">
-        <h1 className="text-2xl font-semibold">{b.title}</h1>
+        <h1 className="text-3xl font-semibold gradient-text">{b.title}</h1>
         <div className="text-sm text-neutral-600 dark:text-neutral-400">{new Date(b.published_at).toLocaleString()}</div>
       </header>
       {cover ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={cover} alt="" className="w-full h-64 object-cover rounded-lg" />
+        <img src={cover} alt="" className="w-full h-64 object-cover rounded-xl" />
       ) : null}
       {b.summary && (
         <p className="text-neutral-800 dark:text-neutral-200">{b.summary}</p>

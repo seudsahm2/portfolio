@@ -3,6 +3,10 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --brand-start: #6366f1; /* indigo-500 */
+  --brand-end: #a855f7;   /* purple-500 */
+  --muted: #f3f4f6;       /* gray-100 */
+  --muted-foreground: #6b7280; /* gray-500 */
 }
 
 @theme inline {
@@ -10,6 +14,10 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+  --color-brand-start: var(--brand-start);
+  --color-brand-end: var(--brand-end);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,4 +40,81 @@ body {
   padding-left: 1rem;
   padding-right: 1rem;
   max-width: 72rem; /* ~1152px */
+}
+
+/* Fancy background layers */
+.bg-grid {
+  background-image: linear-gradient(to right, rgb(120 120 120 / 0.08) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgb(120 120 120 / 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.radial-spotlight {
+  position: absolute;
+  inset: -10% -10% 0 -10%;
+  z-index: -1;
+  background: radial-gradient(600px 300px at top right, color(display-p3 0.4 0.4 0.9 / 0.25), transparent),
+              radial-gradient(600px 300px at top left, color(display-p3 0.8 0.4 1 / 0.15), transparent);
+  filter: blur(20px);
+  pointer-events: none;
+}
+
+.gradient-text {
+  background-image: linear-gradient(90deg, var(--brand-start), var(--brand-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass {
+  background: color-mix(in oklab, var(--background) 70%, transparent);
+  backdrop-filter: saturate(140%) blur(8px);
+}
+
+::selection {
+  background: color-mix(in oklab, var(--brand-start) 30%, transparent);
+}
+
+/* Subtle animated gradient text shine */
+.shine {
+  background: linear-gradient(90deg, var(--brand-start), var(--brand-end));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  position: relative;
+}
+.shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: shine 3s infinite;
+}
+@keyframes shine {
+  0% { transform: translateX(-100%); }
+  60% { transform: translateX(100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* Hover card lift */
+.hover-card {
+  transition: transform .25s ease, box-shadow .25s ease, background-color .25s ease;
+}
+.hover-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+/* Soft gradient border utility */
+.gradient-border {
+  position: relative;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: linear-gradient(120deg, var(--brand-start), var(--brand-end));
+  z-index: -1;
 }

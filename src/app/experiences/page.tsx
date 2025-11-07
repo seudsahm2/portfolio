@@ -1,7 +1,6 @@
 "use client";
 
 import { useExperiences } from "@/lib/api.hooks";
-import { useAuthGuard } from "@/lib/useAuthGuard";
 
 function formatRange(start?: string | null, end?: string | null) {
   if (!start) return "";
@@ -11,12 +10,11 @@ function formatRange(start?: string | null, end?: string | null) {
 }
 
 export default function ExperiencesPage() {
-  useAuthGuard();
   const q = useExperiences();
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8 space-y-4">
-      <h1 className="text-2xl font-semibold">Experience</h1>
+    <div className="max-w-3xl mx-auto px-4 py-10 space-y-4">
+      <h1 className="text-3xl font-semibold gradient-text">Experience</h1>
 
       {q.isLoading ? (
         <ul className="space-y-3">
@@ -29,7 +27,7 @@ export default function ExperiencesPage() {
       ) : q.data?.length ? (
         <ul className="space-y-4">
           {q.data.map((e) => (
-            <li key={e.id} className="rounded-lg border p-4">
+            <li key={e.id} className="rounded-xl gradient-border p-5 bg-white/70 dark:bg-neutral-900/70 hover-card">
               <div className="flex items-center justify-between">
                 <div className="font-medium">{e.role} @ {e.company}</div>
                 <div className="text-sm text-neutral-600 dark:text-neutral-400">{formatRange(e.start_date, e.end_date)}</div>
