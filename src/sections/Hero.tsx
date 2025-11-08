@@ -19,6 +19,7 @@ export function Hero() {
   const socials: Record<string, string> =
     typeof profile.socials === "object" && profile.socials ? (profile.socials as Record<string, string>) : {};
   const open = Boolean(profile.open_to_opportunities);
+  const website = typeof profile.website === "string" ? profile.website : undefined;
 
   return (
     <section id="about" data-section="about" className="scroll-mt-24 py-20">
@@ -77,8 +78,8 @@ export function Hero() {
             {socials?.twitter && (
               <a href={socials.twitter} target="_blank" rel="noreferrer" className="px-4 py-2 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium border border-slate-700/70">Twitter</a>
             )}
-            {profile?.website && (
-              <a href={profile.website as string} target="_blank" rel="noreferrer" className="px-4 py-2 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium border border-slate-700/70">Website</a>
+            {website && (
+              <a href={website} target="_blank" rel="noreferrer" className="px-4 py-2 rounded-md bg-slate-800 hover:bg-slate-700 text-slate-200 text-sm font-medium border border-slate-700/70">Website</a>
             )}
           </div>
         </div>

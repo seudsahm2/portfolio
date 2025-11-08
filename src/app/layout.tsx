@@ -7,7 +7,6 @@ import Providers from "./providers";
 import ChatDock from "@/components/chat/ChatDock";
 import AnalyticsConsent from "@/components/seo/AnalyticsConsent";
 import SeoJsonLd from "@/components/seo/SeoJsonLd";
-import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 import DevOverlay from "@/components/DevOverlay";
 
@@ -59,14 +58,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen bg-background text-foreground`}>
         <Providers>
-          {/* Google tag (gtag.js) - Manual GA4 install as requested */}
-          <Script src="https://www.googletagmanager.com/gtag/js?id=G-LFX02TQLHD" strategy="beforeInteractive" />
-          <Script id="ga4-init" strategy="afterInteractive">{
-            `window.dataLayer = window.dataLayer || [];
-             function gtag(){dataLayer.push(arguments);} 
-             gtag('js', new Date());
-             gtag('config', 'G-LFX02TQLHD');`
-          }</Script>
+          {/* GA is injected by AnalyticsConsent when consent is granted */}
 
           <Header />
           <main className="min-h-[calc(100vh-8rem)]">{children}</main>

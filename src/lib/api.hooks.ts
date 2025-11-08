@@ -153,3 +153,14 @@ export function useChatAskMutation() {
 	});
 }
 
+// Admin-only pinned repo ingestion
+export function useIngestPinnedMutation() {
+	const qc = useQueryClient();
+	return useMutation<components["schemas"]["Project"][], unknown, { username?: string } | undefined>({
+		mutationFn: (body) => client.ingestPinned(body),
+		onSuccess: () => {
+			qc.invalidateQueries({ queryKey: qk.projects });
+		},
+	});
+}
+

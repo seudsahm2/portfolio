@@ -27,14 +27,16 @@
   }
 }
 
+html {
+  scroll-behavior: smooth;
+  text-size-adjust: 100%; /* modern standard property */
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-}
-
-html {
-  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%; /* prevent invalid value warning */
 }
 
 .container {

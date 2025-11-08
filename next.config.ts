@@ -8,10 +8,6 @@ const nextConfig = {
     // Pin the workspace root to this Next.js app directory (silences multiple lockfile warning)
     root: __dirname,
   },
-  // Allow localhost loopback variations during dev to silence cross origin warning
-  experimental: {
-    allowedDevOrigins: ["http://localhost:3000", "http://127.0.0.1:3000", "http://localhost:3001", "http://127.0.0.1:3001"],
-  },
 } satisfies NextConfig;
 
 export default nextConfig;

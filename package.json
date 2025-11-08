@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "gen:openapi": "openapi-typescript http://localhost:8000/api/schema/json/ -o src/lib/api.types.ts"
+  "gen:openapi": "openapi-typescript ..\\seud_portfolio_backend\\schema.json -o src/lib/api.types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^3",

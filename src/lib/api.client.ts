@@ -1,6 +1,13 @@
 import { api } from "./http";
 import type { components } from "./api.types";
 
+// Local types for schemas not emitted by the OpenAPI generator (inline responses)
+export type KnowledgeSources = {
+	total: number;
+	counts: Record<string, number>;
+	github_code_samples: string[];
+};
+
 // Inferred helpers
 type ListResp<T> = {
 	count: number;
@@ -34,10 +41,7 @@ export const client = {
 		api.get<ListResp<components["schemas"]["Skill"]>>("/api/skills/"),
 	listProfiles: () =>
 		api.get<ListResp<components["schemas"]["Profile"]>>("/api/profiles/"),
-	getKnowledgeSources: () =>
-		api.get<components["schemas"]["KnowledgeSources"]>(
-			"/api/knowledge/sources"
-		),
+	getKnowledgeSources: () => api.get<KnowledgeSources>("/api/knowledge/sources"),
 
 	// Actions
 	contact: (body: components["schemas"]["Contact"]) =>
@@ -48,6 +52,13 @@ export const client = {
 	chatAsk: (body: components["schemas"]["ChatAsk"]) =>
 		api.post<components["schemas"]["ChatLog"], components["schemas"]["ChatAsk"]>(
 			"/api/chat/ask",
+			body
+		),
+
+	// GitHub pinned ingestion (admin-only)
+	ingestPinned: (body?: { username?: string }) =>
+		api.post<components["schemas"]["Project"][], { username?: string } | undefined>(
+			"/api/github/ingest_pinned",
 			body
 		),
 };
