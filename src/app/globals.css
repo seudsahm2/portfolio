@@ -1,29 +1,29 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --brand-start: #6366f1; /* indigo-500 */
-  --brand-end: #a855f7;   /* purple-500 */
-  --muted: #f3f4f6;       /* gray-100 */
-  --muted-foreground: #6b7280; /* gray-500 */
+  --background: #0a0f1c; /* deep slate */
+  --foreground: #e2e8f0; /* slate-200 */
+  --brand-start: #14b8a6; /* teal-500 */
+  --brand-end: #34d399;   /* emerald-400 */
+  --brand-warm: #fbbf24;  /* amber-400 */
+  --muted: #1e293b;       /* slate-800 */
+  --muted-foreground: #94a3b8; /* slate-400 */
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-brand-start: var(--brand-start);
-  --color-brand-end: var(--brand-end);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
+/* Removed experimental @theme block for lint compatibility; tokens are exposed via root CSS variables. */
+
+/* Accessible focus outline */
+*:focus-visible {
+  outline: 2px solid var(--brand-start);
+  outline-offset: 2px;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #ffffff;
+    --foreground: #0f172a;
+    --muted: #f1f5f9;
+    --muted-foreground: #64748b;
   }
 }
 
@@ -31,6 +31,10 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 .container {
@@ -51,16 +55,16 @@ body {
 
 .radial-spotlight {
   position: absolute;
-  inset: -10% -10% 0 -10%;
+  inset: -12% -12% 0 -12%;
   z-index: -1;
-  background: radial-gradient(600px 300px at top right, color(display-p3 0.4 0.4 0.9 / 0.25), transparent),
-              radial-gradient(600px 300px at top left, color(display-p3 0.8 0.4 1 / 0.15), transparent);
-  filter: blur(20px);
+  background: radial-gradient(600px 300px at top right, rgba(20,184,166,0.28), transparent),
+              radial-gradient(600px 300px at top left, rgba(251,191,36,0.18), transparent);
+  filter: blur(26px);
   pointer-events: none;
 }
 
 .gradient-text {
-  background-image: linear-gradient(90deg, var(--brand-start), var(--brand-end));
+  background-image: linear-gradient(90deg, var(--brand-start), var(--brand-end), var(--brand-warm));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -115,6 +119,6 @@ body {
   position: absolute;
   inset: -1px;
   border-radius: inherit;
-  background: linear-gradient(120deg, var(--brand-start), var(--brand-end));
+  background: linear-gradient(120deg, var(--brand-start), var(--brand-end), var(--brand-warm));
   z-index: -1;
 }
