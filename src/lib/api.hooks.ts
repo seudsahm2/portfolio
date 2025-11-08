@@ -13,6 +13,7 @@ export const qk = {
 	skills: ["skills"] as const,
 	knowledgeSources: ["knowledgeSources"] as const,
 	profiles: ["profiles"] as const,
+	profile: ["profile"] as const,
 };
 
 // Lists with placeholderData(prev) for fast hydration
@@ -72,6 +73,18 @@ export function useProfiles() {
 		queryKey: qk.profiles,
 		queryFn: client.listProfiles,
 		select: (d) => d.results,
+	});
+}
+
+// Convenience hook for singleton profile (first item) with memoized derivations
+export function useProfile() {
+	return useQuery<components["schemas"]["Profile"] | undefined>({
+		queryKey: qk.profile,
+		queryFn: async () => {
+			const list = await client.listProfiles();
+			return list.results[0];
+		},
+		select: (p) => p,
 	});
 }
 
