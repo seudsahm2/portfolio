@@ -1,6 +1,7 @@
 "use client";
 
 import { useProfiles } from "@/lib/api.hooks";
+import type { components } from "@/lib/api.types";
 import { env } from "@/lib/env";
 
 function ScriptTag({ json }: { json: unknown }) {
@@ -11,8 +12,8 @@ function ScriptTag({ json }: { json: unknown }) {
 
 export default function SeoJsonLd() {
   const profiles = useProfiles();
-  const p = profiles.data?.[0];
-  const name = p?.full_name || "Seud";
+  const p = profiles.data?.[0] as components["schemas"]["Profile"] | undefined;
+  const name = p?.name || "Seud";
   const title = p?.title || "Software Developer";
   // Use a stable URL from env to avoid SSR/CSR mismatches
   const url = env.NEXT_PUBLIC_SITE_URL;

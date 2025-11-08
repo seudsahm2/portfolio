@@ -136,6 +136,31 @@ export interface paths {
         patch: operations["api_experiences_partial_update"];
         trace?: never;
     };
+    "/api/github/ingest_pinned": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** @description Admin-only: fetch pinned GitHub repositories (via GraphQL) and upsert Projects.
+         *
+         *     Requires GITHUB_TOKEN (with public_repo scope sufficient for public pinned repos; private requires repo scope).
+         *     Upsert logic:
+         *       - Identify project by repo URL (htmlUrl) or link if already stored.
+         *       - Update stars, forks, language, topics, last_pushed, featured=True.
+         *       - If repository topics include names matching existing Skill.name (case-insensitive) or primary language matches a Skill,
+         *         attach those skills (non-destructive; existing associations preserved).
+         *     Body: { username?: string } – if omitted, GraphQL viewer used (token required). */
+        post: operations["api_github_ingest_pinned_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/github/repos.json": {
         parameters: {
             query?: never;
@@ -337,22 +362,6 @@ export interface paths {
         patch: operations["api_skills_partial_update"];
         trace?: never;
     };
-    "/test/github-repos": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        get: operations["test_github_repos_retrieve"];
-        put?: never;
-        post?: never;
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
 }
 export type webhooks = Record<string, never>;
 export interface components {
@@ -410,6 +419,25 @@ export interface components {
             /** Format: date */
             end_date?: string | null;
             description?: string;
+            location?: string;
+            /** @description e.g., full-time, part-time, contract, internship */
+            employment_type?: string;
+            is_remote?: boolean;
+            industry?: string;
+            /** Format: uri */
+            company_website?: string;
+            /** Format: uri */
+            company_logo?: string | null;
+            /** Format: uri */
+            readonly company_logo_url: string;
+            /** @description List of key technologies used */
+            technologies?: unknown;
+            /** @description List of bullet-point achievements */
+            achievements?: unknown;
+            /** @description Short summary of measurable impact */
+            impact?: string;
+            order?: number;
+            readonly duration_months: string;
         };
         KnowledgeDocument: {
             readonly id: number;
@@ -420,6 +448,24 @@ export interface components {
             readonly created_at: string;
             /** Format: date-time */
             readonly updated_at: string;
+        };
+        KnowledgeIngestRequest: {
+            repos?: string[];
+            username?: string;
+            /** @default false */
+            include_private: boolean;
+        };
+        KnowledgeIngestResponse: {
+            ingested: components["schemas"]["KnowledgeDocument"][];
+            ingested_count: number;
+            skipped: number;
+        };
+        KnowledgeSources: {
+            total: number;
+            counts: {
+                [key: string]: number;
+            };
+            github_code_samples: string[];
         };
         PaginatedBlogPostList: {
             /** @example 123 */
@@ -518,67 +564,162 @@ export interface components {
             /** Format: date */
             end_date?: string | null;
             description?: string;
+            location?: string;
+            /** @description e.g., full-time, part-time, contract, internship */
+            employment_type?: string;
+            is_remote?: boolean;
+            industry?: string;
+            /** Format: uri */
+            company_website?: string;
+            /** Format: uri */
+            company_logo?: string | null;
+            /** Format: uri */
+            readonly company_logo_url?: string;
+            /** @description List of key technologies used */
+            technologies?: unknown;
+            /** @description List of bullet-point achievements */
+            achievements?: unknown;
+            /** @description Short summary of measurable impact */
+            impact?: string;
+            order?: number;
+            readonly duration_months?: string;
         };
         PatchedProfile: {
             readonly id?: number;
-            full_name?: string;
+            user?: number | null;
+            readonly name?: string;
+            readonly email?: string;
             title?: string;
+            tagline?: string;
             bio?: string;
-            /** Format: email */
-            email?: string;
             location?: string;
             /** Format: uri */
             website?: string;
+            /** @description Short comma-separated primary stack */
+            primary_stack?: string;
+            years_experience?: number;
+            open_to_opportunities?: boolean;
+            /** Format: uri */
+            avatar?: string | null;
+            /** Format: uri */
+            readonly avatar_url?: string;
+            /** @description e.g. {github, linkedin, twitter, website} */
+            socials?: unknown;
+            /** @description List of short bullet points to showcase */
+            highlights?: unknown;
         };
         PatchedProject: {
             readonly id?: number;
-            readonly skills?: components["schemas"]["Skill"][];
             title?: string;
             description?: string;
             /** Format: uri */
             link?: string;
             /** Format: uri */
             repo?: string;
+            readonly skills?: components["schemas"]["Skill"][];
             featured?: boolean;
             /** Format: date */
             created_at?: string | null;
+            stars?: number;
+            forks?: number;
+            language?: string;
+            topics?: string[];
+            /** Format: date-time */
+            last_pushed?: string | null;
             /** Format: uri */
             image?: string | null;
             /** Format: uri */
             image_url?: string;
+            readme_excerpt?: string;
+            license_spdx?: string;
+            license_name?: string;
+            open_issues?: number;
+            watchers?: number;
+            default_branch?: string;
+            latest_release_tag?: string;
+            /** Format: date-time */
+            latest_release_published?: string | null;
+            is_archived?: boolean;
+            is_template?: boolean;
+            has_ci?: boolean;
         };
         PatchedSkill: {
             readonly id?: number;
             name?: string;
-            level?: number;
+            /** @description e.g. frontend, backend, devops, cloud, data, testing */
+            category?: string;
+            description?: string;
+            /** Format: uri */
+            docs_url?: string;
+            /** @description icon key or url */
+            icon?: string;
+            highlights?: unknown;
+            since_year?: number | null;
+            readonly years_used?: string;
+            primary?: boolean;
+            /** @description CSS color or hex, e.g. #10b981 */
+            accent?: string;
+            order?: number;
+            readonly project_count?: string;
         };
         Profile: {
             readonly id: number;
-            full_name: string;
+            user?: number | null;
+            readonly name: string;
+            readonly email: string;
             title?: string;
+            tagline?: string;
             bio?: string;
-            /** Format: email */
-            email?: string;
             location?: string;
             /** Format: uri */
             website?: string;
+            /** @description Short comma-separated primary stack */
+            primary_stack?: string;
+            years_experience?: number;
+            open_to_opportunities?: boolean;
+            /** Format: uri */
+            avatar?: string | null;
+            /** Format: uri */
+            readonly avatar_url: string;
+            /** @description e.g. {github, linkedin, twitter, website} */
+            socials?: unknown;
+            /** @description List of short bullet points to showcase */
+            highlights?: unknown;
         };
         Project: {
             readonly id: number;
-            readonly skills: components["schemas"]["Skill"][];
             title: string;
             description?: string;
             /** Format: uri */
             link?: string;
             /** Format: uri */
             repo?: string;
+            readonly skills: components["schemas"]["Skill"][];
             featured?: boolean;
             /** Format: date */
             created_at?: string | null;
+            stars?: number;
+            forks?: number;
+            language?: string;
+            topics?: string[];
+            /** Format: date-time */
+            last_pushed?: string | null;
             /** Format: uri */
             image?: string | null;
             /** Format: uri */
             image_url?: string;
+            readme_excerpt?: string;
+            license_spdx?: string;
+            license_name?: string;
+            open_issues?: number;
+            watchers?: number;
+            default_branch?: string;
+            latest_release_tag?: string;
+            /** Format: date-time */
+            latest_release_published?: string | null;
+            is_archived?: boolean;
+            is_template?: boolean;
+            has_ci?: boolean;
         };
         /**
          * @description * `google` - google
@@ -589,7 +730,21 @@ export interface components {
         Skill: {
             readonly id: number;
             name: string;
-            level?: number;
+            /** @description e.g. frontend, backend, devops, cloud, data, testing */
+            category?: string;
+            description?: string;
+            /** Format: uri */
+            docs_url?: string;
+            /** @description icon key or url */
+            icon?: string;
+            highlights?: unknown;
+            since_year?: number | null;
+            readonly years_used: string;
+            primary?: boolean;
+            /** @description CSS color or hex, e.g. #10b981 */
+            accent?: string;
+            order?: number;
+            readonly project_count: string;
         };
         TokenObtainPair: {
             username: string;
@@ -1009,6 +1164,25 @@ export interface operations {
             };
         };
     };
+    api_github_ingest_pinned_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Project"][];
+                };
+            };
+        };
+    };
     "api_github_repos.json_retrieve": {
         parameters: {
             query?: never;
@@ -1034,14 +1208,20 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody?: never;
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["KnowledgeIngestRequest"];
+                "application/x-www-form-urlencoded": components["schemas"]["KnowledgeIngestRequest"];
+                "multipart/form-data": components["schemas"]["KnowledgeIngestRequest"];
+            };
+        };
         responses: {
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["KnowledgeDocument"][];
+                    "application/json": components["schemas"]["KnowledgeIngestResponse"];
                 };
             };
         };
@@ -1074,12 +1254,13 @@ export interface operations {
         };
         requestBody?: never;
         responses: {
-            /** @description No response body */
             200: {
                 headers: {
                     [name: string]: unknown;
                 };
-                content?: never;
+                content: {
+                    "application/json": components["schemas"]["KnowledgeSources"];
+                };
             };
         };
     };
@@ -1116,7 +1297,7 @@ export interface operations {
             path?: never;
             cookie?: never;
         };
-        requestBody: {
+        requestBody?: {
             content: {
                 "application/json": components["schemas"]["Profile"];
                 "application/x-www-form-urlencoded": components["schemas"]["Profile"];
@@ -1166,7 +1347,7 @@ export interface operations {
             };
             cookie?: never;
         };
-        requestBody: {
+        requestBody?: {
             content: {
                 "application/json": components["schemas"]["Profile"];
                 "application/x-www-form-urlencoded": components["schemas"]["Profile"];
@@ -1447,10 +1628,12 @@ export interface operations {
     api_skills_list: {
         parameters: {
             query?: {
+                category?: string;
                 /** @description Which field to use when ordering the results. */
                 ordering?: string;
                 /** @description A page number within the paginated result set. */
                 page?: number;
+                primary?: boolean;
                 /** @description A search term. */
                 search?: string;
             };
@@ -1591,24 +1774,6 @@ export interface operations {
                 content: {
                     "application/json": components["schemas"]["Skill"];
                 };
-            };
-        };
-    };
-    test_github_repos_retrieve: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description No response body */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content?: never;
             };
         };
     };
