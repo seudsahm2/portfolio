@@ -40,6 +40,54 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/blog/subscribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["api_blog_subscribe_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blog/unsubscribe": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["api_blog_unsubscribe_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blog/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["api_blog_verify_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/blogposts/": {
         parameters: {
             query?: never;
@@ -70,6 +118,134 @@ export interface paths {
         options?: never;
         head?: never;
         patch: operations["api_blogposts_partial_update"];
+        trace?: never;
+    };
+    "/api/blogposts/{id}/bookmark/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["api_blogposts_bookmark_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blogposts/{id}/comments/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_blogposts_comments_retrieve"];
+        put?: never;
+        post: operations["api_blogposts_comments_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blogposts/{id}/like/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["api_blogposts_like_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blogposts/{id}/related/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_blogposts_related_retrieve"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blogposts/{id}/unbookmark/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["api_blogposts_unbookmark_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blogposts/{id}/unlike/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post?: never;
+        delete: operations["api_blogposts_unlike_destroy"];
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blogseries/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_blogseries_list"];
+        put?: never;
+        post: operations["api_blogseries_create"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/blogseries/{id}/": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["api_blogseries_retrieve"];
+        put: operations["api_blogseries_update"];
+        post?: never;
+        delete: operations["api_blogseries_destroy"];
+        options?: never;
+        head?: never;
+        patch: operations["api_blogseries_partial_update"];
         trace?: never;
     };
     "/api/chat/ask": {
@@ -372,12 +548,54 @@ export interface components {
             slug: string;
             summary?: string;
             content?: string;
+            content_format?: string;
+            language?: string;
+            /** @description draft|published|archived */
+            status?: string;
             /** Format: date-time */
             readonly published_at: string;
+            /** Format: date-time */
+            readonly updated_at: string;
+            excerpt?: string;
+            table_of_contents?: unknown;
+            reading_time?: number;
+            tags?: unknown;
+            views_count?: number;
+            likes_count?: number;
+            bookmarks_count?: number;
+            comments_count?: number;
+            allow_comments?: boolean;
+            featured?: boolean;
+            pinned_order?: number;
+            seo_title?: string;
+            seo_description?: string;
+            /** Format: uri */
+            canonical_url?: string;
+            /** Format: uri */
+            og_image_url?: string;
             /** Format: uri */
             cover_image?: string | null;
             /** Format: uri */
             cover_image_url?: string;
+            series?: number | null;
+        };
+        BlogSeries: {
+            readonly id: number;
+            title: string;
+            slug: string;
+            description?: string;
+            order?: number;
+            published?: boolean;
+            /** Format: uri */
+            cover_image?: string | null;
+            /** Format: uri */
+            cover_image_url?: string;
+        };
+        BlogSubscription: {
+            /** Format: email */
+            email: string;
+            readonly verified: boolean;
+            readonly active: boolean;
         };
         ChatAsk: {
             provider: components["schemas"]["ProviderEnum"];
@@ -482,6 +700,21 @@ export interface components {
             previous?: string | null;
             results: components["schemas"]["BlogPost"][];
         };
+        PaginatedBlogSeriesList: {
+            /** @example 123 */
+            count: number;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=4
+             */
+            next?: string | null;
+            /**
+             * Format: uri
+             * @example http://api.example.org/accounts/?page=2
+             */
+            previous?: string | null;
+            results: components["schemas"]["BlogSeries"][];
+        };
         PaginatedExperienceList: {
             /** @example 123 */
             count: number;
@@ -548,8 +781,44 @@ export interface components {
             slug?: string;
             summary?: string;
             content?: string;
+            content_format?: string;
+            language?: string;
+            /** @description draft|published|archived */
+            status?: string;
             /** Format: date-time */
             readonly published_at?: string;
+            /** Format: date-time */
+            readonly updated_at?: string;
+            excerpt?: string;
+            table_of_contents?: unknown;
+            reading_time?: number;
+            tags?: unknown;
+            views_count?: number;
+            likes_count?: number;
+            bookmarks_count?: number;
+            comments_count?: number;
+            allow_comments?: boolean;
+            featured?: boolean;
+            pinned_order?: number;
+            seo_title?: string;
+            seo_description?: string;
+            /** Format: uri */
+            canonical_url?: string;
+            /** Format: uri */
+            og_image_url?: string;
+            /** Format: uri */
+            cover_image?: string | null;
+            /** Format: uri */
+            cover_image_url?: string;
+            series?: number | null;
+        };
+        PatchedBlogSeries: {
+            readonly id?: number;
+            title?: string;
+            slug?: string;
+            description?: string;
+            order?: number;
+            published?: boolean;
             /** Format: uri */
             cover_image?: string | null;
             /** Format: uri */
@@ -815,6 +1084,80 @@ export interface operations {
             };
         };
     };
+    api_blog_subscribe_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogSubscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogSubscription"];
+                "multipart/form-data": components["schemas"]["BlogSubscription"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSubscription"];
+                };
+            };
+        };
+    };
+    api_blog_unsubscribe_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogSubscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogSubscription"];
+                "multipart/form-data": components["schemas"]["BlogSubscription"];
+            };
+        };
+        responses: {
+            /** @description No response body */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    api_blog_verify_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogSubscription"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogSubscription"];
+                "multipart/form-data": components["schemas"]["BlogSubscription"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSubscription"];
+                };
+            };
+        };
+    };
     api_blogposts_list: {
         parameters: {
             query?: {
@@ -961,6 +1304,326 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["BlogPost"];
+                };
+            };
+        };
+    };
+    api_blogposts_bookmark_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog post. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogPost"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogPost"];
+                "multipart/form-data": components["schemas"]["BlogPost"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogPost"];
+                };
+            };
+        };
+    };
+    api_blogposts_comments_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog post. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogPost"];
+                };
+            };
+        };
+    };
+    api_blogposts_comments_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog post. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogPost"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogPost"];
+                "multipart/form-data": components["schemas"]["BlogPost"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogPost"];
+                };
+            };
+        };
+    };
+    api_blogposts_like_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog post. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogPost"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogPost"];
+                "multipart/form-data": components["schemas"]["BlogPost"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogPost"];
+                };
+            };
+        };
+    };
+    api_blogposts_related_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog post. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogPost"];
+                };
+            };
+        };
+    };
+    api_blogposts_unbookmark_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog post. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    api_blogposts_unlike_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog post. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    api_blogseries_list: {
+        parameters: {
+            query?: {
+                /** @description Which field to use when ordering the results. */
+                ordering?: string;
+                /** @description A page number within the paginated result set. */
+                page?: number;
+                /** @description A search term. */
+                search?: string;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaginatedBlogSeriesList"];
+                };
+            };
+        };
+    };
+    api_blogseries_create: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogSeries"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogSeries"];
+                "multipart/form-data": components["schemas"]["BlogSeries"];
+            };
+        };
+        responses: {
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSeries"];
+                };
+            };
+        };
+    };
+    api_blogseries_retrieve: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog series. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSeries"];
+                };
+            };
+        };
+    };
+    api_blogseries_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog series. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["BlogSeries"];
+                "application/x-www-form-urlencoded": components["schemas"]["BlogSeries"];
+                "multipart/form-data": components["schemas"]["BlogSeries"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSeries"];
+                };
+            };
+        };
+    };
+    api_blogseries_destroy: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog series. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No response body */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    api_blogseries_partial_update: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                /** @description A unique integer value identifying this blog series. */
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "application/json": components["schemas"]["PatchedBlogSeries"];
+                "application/x-www-form-urlencoded": components["schemas"]["PatchedBlogSeries"];
+                "multipart/form-data": components["schemas"]["PatchedBlogSeries"];
+            };
+        };
+        responses: {
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BlogSeries"];
                 };
             };
         };

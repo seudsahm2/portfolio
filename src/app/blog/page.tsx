@@ -1,7 +1,6 @@
-import { redirect } from "next/navigation";
+"use client";
+import { BlogSection } from "@/sections/Blog";
 
-// Legacy blog index page: redirect to single-page section
-export default function BlogRedirect() {
-  redirect("/#blog");
-  return null;
+export default function BlogIndexPage() {
+  return <BlogSection />;
 }
